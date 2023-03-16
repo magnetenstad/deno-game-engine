@@ -17,11 +17,9 @@ type GameOptions = typeof defaultOptions;
 
 export class Game {
   options: GameOptions = defaultOptions;
-  interval?: number = undefined;
-  t = 0;
   gameObjects: GameObject[] = [];
-  isPlaying = false;
   imageAssets?: Record<string, ImageAsset>;
+  t = 0;
 
   constructor() {
     this.setOptions(defaultOptions);
@@ -36,10 +34,6 @@ export class Game {
     canvasElement.width = this.options.width * this.options.scale;
     canvasElement.height = this.options.height * this.options.scale;
     ctx.scale(this.options.scale, this.options.scale);
-
-    if (this.isPlaying) {
-      this.__resetIntervals();
-    }
   }
 
   __maybeSort() {
@@ -66,12 +60,6 @@ export class Game {
     this.t++;
   }
 
-  __resetIntervals() {
-    const mspf = 1000 / this.options.fps;
-    clearInterval(this.interval);
-    this.interval = setInterval(() => this.__step(), mspf);
-  }
-
   addGameObject(object: GameObject) {
     this.gameObjects.push(object);
   }
@@ -86,12 +74,24 @@ export class Game {
   }
 
   play() {
-    this.isPlaying = true;
     if (!this.imageAssets) {
       console.warn(
         'Game has no image assets! Use game.setImageAssets() before calling game.play()'
       );
     }
-    this.__resetIntervals();
+    const interval = 1000 / this.options.fps;
+    let timePrev = 0;
+    const gameLoop = (time: number) => {
+      requestAnimationFrame(gameLoop);
+      this.__step();
+
+      const delta = time - timePrev;
+
+      if (delta > interval) {
+        timePrev = time - (delta % interval);
+        this.__step();
+      }
+    };
+    gameLoop(0);
   }
 }
