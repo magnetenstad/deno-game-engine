@@ -1,20 +1,32 @@
 import { drawImage } from '../engine/draw.ts';
 import { Input } from '../engine/events.ts';
-import { PositionObject } from '../engine/gameObject.ts';
+import { Vec2, PositionObject } from '../engine/position.ts';
 import { ImageAssets } from '../main.ts';
+
+const size = 16;
 
 export class Player extends PositionObject {
   speed = 10;
   image = ImageAssets.player;
+  target: Vec2;
+
+  constructor(x: number, y: number) {
+    super(x, y);
+    this.target = this.pos.copy();
+  }
 
   draw(): void {
-    drawImage(this.image, this.pos.x, this.pos.y);
+    drawImage(this.image, this.pos);
   }
 
   step(): void {
-    if (Input.key('w')) this.pos.y -= this.speed;
-    if (Input.key('a')) this.pos.x -= this.speed;
-    if (Input.key('s')) this.pos.y += this.speed;
-    if (Input.key('d')) this.pos.x += this.speed;
+    const snapped = this.pos.snap(size);
+    if (Input.key('w')) this.target.y = snapped.y - size;
+    if (Input.key('a')) this.target.x = snapped.x - size;
+    if (Input.key('s')) this.target.y = snapped.y + size;
+    if (Input.key('d')) this.target.x = snapped.x + size;
+    this.pos.x += Math.sign(this.target.x - this.pos.x);
+    this.pos.y += Math.sign(this.target.y - this.pos.y);
+    this.setZIndex(this.pos.y + size);
   }
 }

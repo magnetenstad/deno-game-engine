@@ -1,5 +1,6 @@
 import { canvasElement, ctx } from './dom.ts';
 import { ImageAsset } from './images.ts';
+import { Vec2 } from './position.ts';
 
 export const drawRect = (x: number, y: number, w: number, h: number) => {
   ctx.fillStyle = 'white';
@@ -12,16 +13,15 @@ export const drawClear = () => {
 
 export const drawImage = (
   imageAsset: ImageAsset,
-  x: number,
-  y: number,
+  pos: Vec2,
   options = { smoothing: false }
 ) => {
   if (imageAsset.image) {
     ctx.imageSmoothingEnabled = options.smoothing;
     ctx.drawImage(
       imageAsset.image,
-      x,
-      y,
+      pos.x,
+      pos.y,
       imageAsset.image.width,
       imageAsset.image.height
     );

@@ -10,15 +10,15 @@ const defaultOptions = {
   height: 320 as number,
   scale: 2 as number,
   fps: 60 as number,
+  zSort: true as boolean,
 } as const;
 
 type GameOptions = typeof defaultOptions;
 
 export class Game {
   options: GameOptions = defaultOptions;
-  drawInterval?: number = undefined;
-  stepInterval?: number = undefined;
-  drawStep = 0;
+  interval?: number = undefined;
+  t = 0;
   gameObjects: GameObject[] = [];
   isPlaying = false;
   imageAssets?: Record<string, ImageAsset>;
@@ -38,23 +38,38 @@ export class Game {
     ctx.scale(this.options.scale, this.options.scale);
 
     if (this.isPlaying) {
-      this.resetIntervals();
+      this.__resetIntervals();
     }
   }
 
-  resetIntervals() {
-    clearInterval(this.drawInterval);
-    this.drawInterval = setInterval(() => {
-      drawClear();
-      this.gameObjects.forEach((object) => object.draw(this.drawStep));
-      this.drawStep++;
-    }, 1000 / this.options.fps);
+  __maybeSort() {
+    if (!this.options.zSort) return;
+    let shouldSort = false;
+    for (let i = 0; i < this.gameObjects.length; i++) {
+      if (this.gameObjects[i].__changed) {
+        shouldSort = true;
+        break;
+      }
+    }
+    if (shouldSort) {
+      this.gameObjects.sort((a, b) => a.__zIndex - b.__zIndex);
+      this.gameObjects.forEach((o) => (o.__changed = false));
+    }
+  }
 
-    clearInterval(this.stepInterval);
-    this.stepInterval = setInterval(() => {
-      handleInput(this);
-      this.gameObjects.forEach((object) => object.step());
-    }, 1000 / this.options.fps);
+  __step() {
+    this.__maybeSort();
+    handleInput(this);
+    drawClear();
+    this.gameObjects.forEach((object) => object.draw(this.t));
+    this.gameObjects.forEach((object) => object.step());
+    this.t++;
+  }
+
+  __resetIntervals() {
+    const mspf = 1000 / this.options.fps;
+    clearInterval(this.interval);
+    this.interval = setInterval(() => this.__step(), mspf);
   }
 
   addGameObject(object: GameObject) {
@@ -77,6 +92,6 @@ export class Game {
         'Game has no image assets! Use game.setImageAssets() before calling game.play()'
       );
     }
-    this.resetIntervals();
+    this.__resetIntervals();
   }
 }

@@ -1,21 +1,14 @@
-export type Position = {
-  x: number;
-  y: number;
-};
-
 export class GameObject {
+  __changed = true;
+  __zIndex = 0;
+
   step() {}
   draw(_t: number) {}
   onKeyPress(_ev: string) {}
   onKeyRelease(_ev: string) {}
-}
 
-export class PositionObject extends GameObject {
-  pos: Position = { x: 0, y: 0 };
-
-  constructor(x: number, y: number) {
-    super();
-    this.pos.x = x;
-    this.pos.y = y;
+  setZIndex(zIndex: number) {
+    this.__zIndex = zIndex;
+    this.__changed = true;
   }
 }

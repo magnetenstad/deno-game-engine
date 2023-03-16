@@ -18,8 +18,8 @@ game.setOptions({
 
 game.setImageAssets(ImageAssets);
 
-game.addGameObject(new RectangleSinObject(10, 10));
-game.addGameObject(new RectangleSinObject(100, 250));
+game.addGameObject(new RectangleSinObject(10, 10, 50, 50));
+game.addGameObject(new RectangleSinObject(100, 250, 50, 50));
 game.addGameObject(new Player(100, 250));
 
 game.play();
