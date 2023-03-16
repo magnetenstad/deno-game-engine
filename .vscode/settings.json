@@ -1,4 +1,5 @@
 {
+  "deno.config": "./tsconfig.json",
   "deno.enable": true,
   "deno.unstable": true
 }
