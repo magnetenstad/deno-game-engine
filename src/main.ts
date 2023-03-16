@@ -1,7 +1,7 @@
 import { canvas, ctx } from './dom.ts';
 import { drawClear } from './draw.ts';
 import { handleInput } from './events.ts';
-import { addGameObject, gameObjects } from './gameobject.ts';
+import { addGameObject, gameObjects } from './gameObject.ts';
 import { Player } from './objects/player.ts';
 import { RectangleSinObject } from './objects/rectangleObject.ts';
 

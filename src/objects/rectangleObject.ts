@@ -1,5 +1,5 @@
 import { drawRect } from '../draw.ts';
-import { PositionObject } from '../gameobject.ts';
+import { PositionObject } from '../gameObject.ts';
 import { drawStep } from '../main.ts';
 
 export class RectangleSinObject extends PositionObject {

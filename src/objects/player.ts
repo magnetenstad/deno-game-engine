@@ -1,6 +1,6 @@
 import { drawRect } from '../draw.ts';
 import { Input } from '../events.ts';
-import { PositionObject } from '../gameobject.ts';
+import { PositionObject } from '../gameObject.ts';
 
 export class Player extends PositionObject {
   speed = 10;

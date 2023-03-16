@@ -1,4 +1,4 @@
-import { gameObjects } from './gameobject.ts';
+import { gameObjects } from './gameObject.ts';
 
 const keysJustPressed = new Set<string>();
 const keysJustReleased = new Set<string>();
