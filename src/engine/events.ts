@@ -1,4 +1,4 @@
-import { gameObjects } from './gameObject.ts';
+import { Game } from './game.ts';
 
 const keysJustPressed = new Set<string>();
 const keysJustReleased = new Set<string>();
@@ -17,14 +17,14 @@ document.addEventListener('keyup', (ev) => {
   keysJustReleased.add(ev.key);
 });
 
-export const handleInput = () => {
+export const handleInput = (game: Game) => {
   keysJustPressed.forEach((key) => {
     activeKeys.add(key);
-    gameObjects.forEach((obj) => obj.onKeyPress(key));
+    game.gameObjects.forEach((obj) => obj.onKeyPress(key));
   });
   keysJustReleased.forEach((key) => {
     activeKeys.delete(key);
-    gameObjects.forEach((obj) => obj.onKeyRelease(key));
+    game.gameObjects.forEach((obj) => obj.onKeyRelease(key));
   });
   keysJustPressed.clear();
   keysJustReleased.clear();

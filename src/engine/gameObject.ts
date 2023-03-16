@@ -1,5 +1,3 @@
-import { removeFromArray } from './arrays.ts';
-
 export type Position = {
   x: number;
   y: number;
@@ -7,7 +5,7 @@ export type Position = {
 
 export class GameObject {
   step() {}
-  draw() {}
+  draw(_t: number) {}
   onKeyPress(_ev: string) {}
   onKeyRelease(_ev: string) {}
 }
@@ -20,14 +18,4 @@ export class PositionObject extends GameObject {
     this.pos.x = x;
     this.pos.y = y;
   }
-}
-
-export const gameObjects: GameObject[] = [];
-
-export function addGameObject(object: GameObject) {
-  gameObjects.push(object);
-}
-
-export function removeGameObject(object: GameObject) {
-  removeFromArray(gameObjects, object);
 }

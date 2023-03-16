@@ -1,7 +1,7 @@
-import { drawImage } from '../draw.ts';
-import { Input } from '../events.ts';
-import { PositionObject } from '../gameObject.ts';
-import { ImageAssets } from '../images.ts';
+import { drawImage } from '../engine/draw.ts';
+import { Input } from '../engine/events.ts';
+import { PositionObject } from '../engine/gameObject.ts';
+import { ImageAssets } from '../engine/images.ts';
 
 export class Player extends PositionObject {
   speed = 10;

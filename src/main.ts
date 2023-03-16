@@ -1,35 +1,19 @@
-import { canvasElement, ctx } from './dom.ts';
-import { drawClear } from './draw.ts';
-import { handleInput } from './events.ts';
-import { addGameObject, gameObjects } from './gameObject.ts';
+import { Game } from './engine/game.ts';
 import { Player } from './objects/player.ts';
 import { RectangleSinObject } from './objects/rectangleObject.ts';
 
-const options = {
+const game = new Game();
+
+game.setOptions({
   width: 480,
   height: 320,
   scale: 2,
   draw_fps: 60,
   step_fps: 60,
-};
+});
 
-canvasElement.width = options.width * options.scale;
-canvasElement.height = options.height * options.scale;
-ctx.scale(options.scale, options.scale);
+game.addGameObject(new RectangleSinObject(10, 10));
+game.addGameObject(new RectangleSinObject(100, 250));
+game.addGameObject(new Player(100, 250));
 
-export let drawStep = 0;
-
-setInterval(() => {
-  drawClear();
-  gameObjects.forEach((object) => object.draw());
-  drawStep++;
-}, 1000 / options.draw_fps);
-
-setInterval(() => {
-  handleInput();
-  gameObjects.forEach((object) => object.step());
-}, 1000 / options.step_fps);
-
-addGameObject(new RectangleSinObject(10, 10));
-addGameObject(new RectangleSinObject(100, 250));
-addGameObject(new Player(100, 250));
+game.play();
