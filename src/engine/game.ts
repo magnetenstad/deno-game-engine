@@ -3,6 +3,7 @@ import { canvasElement, ctx } from './dom.ts';
 import { drawClear } from './draw.ts';
 import { handleInput } from './events.ts';
 import { GameObject } from './gameObject.ts';
+import { ImageAsset, loadImages } from './images.ts';
 
 const defaultOptions = {
   width: 480,
@@ -21,6 +22,7 @@ export class Game {
   drawStep = 0;
   gameObjects: GameObject[] = [];
   isPlaying = false;
+  imageAssets?: Record<string, ImageAsset>;
 
   constructor() {
     this.setOptions(defaultOptions);
@@ -64,8 +66,18 @@ export class Game {
     removeFromArray(this.gameObjects, object);
   }
 
+  setImageAssets(imageAssets: Record<string, ImageAsset>) {
+    this.imageAssets = imageAssets;
+    loadImages(this.imageAssets);
+  }
+
   play() {
     this.isPlaying = true;
+    if (!this.imageAssets) {
+      console.warn(
+        'Game has no image assets! Use game.setImageAssets() before calling game.play()'
+      );
+    }
     this.resetIntervals();
   }
 }

@@ -9,17 +9,13 @@ export class ImageAsset {
   }
 }
 
-export const ImageAssets = {
-  player: new ImageAsset('img_player'),
+export const loadImages = (imageAssets: Record<string, ImageAsset>) => {
+  Object.values(imageAssets).forEach((imageAsset) => {
+    const image = new Image();
+    image.src = `/${imageAsset.id}`;
+    image.onload = () => {
+      imageAsset.image = image;
+    };
+    assetsDiv.appendChild(image);
+  });
 };
-
-Object.values(ImageAssets).forEach((imageAsset) => {
-  const image = assetsDiv.querySelector(
-    `#${imageAsset.id}`
-  ) as HTMLImageElement;
-  if (!image) {
-    console.error(`Could not find #${imageAsset.id}!`);
-    return;
-  }
-  imageAsset.image = image;
-});
