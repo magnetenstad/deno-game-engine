@@ -79,12 +79,12 @@ export class Game {
         'Game has no image assets! Use game.setImageAssets() before calling game.play()'
       );
     }
+
     const interval = 1000 / this.options.fps;
     let timePrev = 0;
+
     const gameLoop = (time: number) => {
       requestAnimationFrame(gameLoop);
-      this.__step();
-
       const delta = time - timePrev;
 
       if (delta > interval) {
@@ -92,6 +92,7 @@ export class Game {
         this.__step();
       }
     };
+
     gameLoop(0);
   }
 }
