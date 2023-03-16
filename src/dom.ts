@@ -1,17 +1,27 @@
-export const app = document.body.querySelector('#app')! as HTMLDivElement;
+export const appDiv = document.body.querySelector('#app')! as HTMLDivElement;
 
-if (!app) {
+if (!appDiv) {
   console.error('Could not find #app!');
 }
 
-export const canvas = app.querySelector('canvas')! as HTMLCanvasElement;
+export const canvasElement = appDiv.querySelector(
+  'canvas'
+)! as HTMLCanvasElement;
 
-if (!canvas) {
+if (!canvasElement) {
   console.error('Could not find #canvas!');
 }
 
-export const ctx = canvas.getContext('2d')!;
+export const ctx = canvasElement.getContext('2d')!;
 
 if (!ctx) {
   console.error('Could not get context of canvas!');
+}
+
+export const assetsDiv = document.body.querySelector(
+  '#assets'
+)! as HTMLDivElement;
+
+if (!assetsDiv) {
+  console.error('Could not find #assets!');
 }

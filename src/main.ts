@@ -1,4 +1,4 @@
-import { canvas, ctx } from './dom.ts';
+import { canvasElement, ctx } from './dom.ts';
 import { drawClear } from './draw.ts';
 import { handleInput } from './events.ts';
 import { addGameObject, gameObjects } from './gameObject.ts';
@@ -13,8 +13,8 @@ const options = {
   step_fps: 60,
 };
 
-canvas.width = options.width * options.scale;
-canvas.height = options.height * options.scale;
+canvasElement.width = options.width * options.scale;
+canvasElement.height = options.height * options.scale;
 ctx.scale(options.scale, options.scale);
 
 export let drawStep = 0;

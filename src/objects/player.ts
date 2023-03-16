@@ -1,12 +1,14 @@
-import { drawRect } from '../draw.ts';
+import { drawImage } from '../draw.ts';
 import { Input } from '../events.ts';
 import { PositionObject } from '../gameObject.ts';
+import { ImageAssets } from '../images.ts';
 
 export class Player extends PositionObject {
   speed = 10;
+  image = ImageAssets.player;
 
   draw(): void {
-    drawRect(this.pos.x, this.pos.y, 30, 30);
+    drawImage(this.image, this.pos.x, this.pos.y);
   }
 
   step(): void {

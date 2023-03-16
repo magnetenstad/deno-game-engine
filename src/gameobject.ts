@@ -6,10 +6,10 @@ export type Position = {
 };
 
 export class GameObject {
+  step() {}
+  draw() {}
   onKeyPress(_ev: string) {}
   onKeyRelease(_ev: string) {}
-  draw() {}
-  step() {}
 }
 
 export class PositionObject extends GameObject {
