@@ -6,11 +6,10 @@ import { GameObject } from './gameObject.ts';
 import { ImageAsset, loadImages } from './images.ts';
 
 const defaultOptions = {
-  width: 480,
-  height: 320,
-  scale: 2,
-  draw_fps: 60,
-  step_fps: 60,
+  width: 480 as number,
+  height: 320 as number,
+  scale: 2 as number,
+  fps: 60 as number,
 } as const;
 
 type GameOptions = typeof defaultOptions;
@@ -49,13 +48,13 @@ export class Game {
       drawClear();
       this.gameObjects.forEach((object) => object.draw(this.drawStep));
       this.drawStep++;
-    }, 1000 / defaultOptions.draw_fps);
+    }, 1000 / this.options.fps);
 
     clearInterval(this.stepInterval);
     this.stepInterval = setInterval(() => {
       handleInput(this);
       this.gameObjects.forEach((object) => object.step());
-    }, 1000 / defaultOptions.step_fps);
+    }, 1000 / this.options.fps);
   }
 
   addGameObject(object: GameObject) {

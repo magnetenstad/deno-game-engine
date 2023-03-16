@@ -13,8 +13,7 @@ game.setOptions({
   width: 480,
   height: 320,
   scale: 2,
-  draw_fps: 60,
-  step_fps: 60,
+  fps: 60,
 });
 
 game.setImageAssets(ImageAssets);
