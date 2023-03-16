@@ -1,7 +1,25 @@
-const app = document.body.querySelector('#app')!;
+import { canvas, ctx } from './dom.ts';
+import { drawClear, drawRect } from './draw.ts';
 
-if (!app) {
-  console.log('Could not find #app!');
+const options = {
+  width: 480,
+  height: 320,
+  scale: 2,
+  fps: 60,
+};
+
+canvas.width = options.width * options.scale;
+canvas.height = options.height * options.scale;
+ctx.scale(options.scale, options.scale);
+
+let drawStep = 0;
+
+function draw() {
+  drawClear();
+  drawRect(Math.sin(drawStep / 10) * 100, 10, 100, 100);
+  drawStep++;
 }
 
-app.innerHTML = 'Hello deno-game-engine!';
+setInterval(() => {
+  draw();
+}, 1000 / options.fps);

@@ -1,0 +1,15 @@
+body {
+  background-color: black;
+  margin: 0;
+}
+
+#app {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1em;
+}
+
+#canvas {
+  border: solid white 1px;
+}
