@@ -1,18 +1,21 @@
 import { assetsDiv } from './dom.ts';
 
 export class ImageAsset {
-  id: string;
+  path: string;
   image?: HTMLImageElement;
 
   constructor(path: string) {
-    this.id = path;
+    this.path = path;
   }
 }
 
-export const loadImages = (imageAssets: Record<string, ImageAsset>) => {
+export const loadImages = (
+  imageAssets: Record<string, ImageAsset>,
+  baseUrl: string
+) => {
   Object.values(imageAssets).forEach((imageAsset) => {
     const image = new Image();
-    image.src = `/${imageAsset.id}`;
+    image.src = baseUrl + imageAsset.path;
     image.onload = () => {
       imageAsset.image = image;
     };

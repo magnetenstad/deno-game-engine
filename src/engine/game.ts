@@ -11,6 +11,7 @@ const defaultOptions = {
   scale: 2 as number,
   fps: 60 as number,
   zSort: true as boolean,
+  baseUrl: './' as string,
 } as const;
 
 type GameOptions = typeof defaultOptions;
@@ -70,7 +71,7 @@ export class Game {
 
   setImageAssets(imageAssets: Record<string, ImageAsset>) {
     this.imageAssets = imageAssets;
-    loadImages(this.imageAssets);
+    loadImages(this.imageAssets, this.options.baseUrl);
   }
 
   play() {
