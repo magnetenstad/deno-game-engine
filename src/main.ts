@@ -62,7 +62,7 @@ export const texts = {
       const result = {} as Record<string, number>;
       for (const key of Object.keys(data)) {
         const room = data[key] as Record<string, number>;
-        let value = 0;
+        let value = 20;
         if ('noise' in room) {
           value -= room.noise;
         }
@@ -77,6 +77,12 @@ export const texts = {
 
   user1: new TextObject('Bruker 1', 800, 300),
   user2: new TextObject('Bruker 2', 800, 450),
+  app: new TextObject('StøyApp', 550, 500),
+  cantine: new TextObject('Kantine', 550, 100, (_: Data, newData: Data) => {
+    let result = 0;
+    Object.values(newData).forEach((v: any) => (result += v.people ?? 0));
+    return { cinnamonBuns: result * 2 };
+  }),
 
   // peopleTotal: new TextObject(
   //   'Personer totalt',
@@ -112,6 +118,8 @@ texts.bnoise.arrowTo.push(texts.xnoise);
 texts.xnoise.arrowTo.push(texts.room);
 texts.room.arrowTo.push(texts.user1);
 texts.room.arrowTo.push(texts.user2);
+texts.xnoise.arrowTo.push(texts.app);
+texts.xpeople.arrowTo.push(texts.cantine);
 
 // texts.peopleA.arrowTo.push(texts.peopleTotal);
 // texts.peopleB.arrowTo.push(texts.peopleTotal);
