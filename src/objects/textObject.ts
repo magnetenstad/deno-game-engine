@@ -12,6 +12,7 @@ export class TextObject extends PositionObject {
   target?: TextObject;
   preScript: (oldData: Data, newData: Data) => Data;
   postScript: (data: Data) => Data;
+  sentPrev = '';
 
   constructor(
     text: string,
@@ -56,10 +57,14 @@ export class TextObject extends PositionObject {
   async receiveData(data: Data) {
     this.data = this.preScript(this.data, data);
     await sleep(500);
+    const dataToSend = this.postScript(this.data);
+    const sendString = JSON.stringify(dataToSend);
+    if (sendString == this.sentPrev) return;
+    this.sentPrev = sendString;
     for (let i = 0; i < this.arrowTo.length; i++) {
       const other = this.arrowTo[i];
       const text = new TextObject('', this.pos.x, this.pos.y);
-      text.data = this.postScript(this.data);
+      text.data = dataToSend;
       text.target = other;
       game.addGameObject(text);
     }

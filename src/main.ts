@@ -60,7 +60,7 @@ export const texts = {
 
   room: new TextObject(
     'Anbefalt arbeidsrom',
-    500,
+    550,
     300,
     (oldData: Data, newData: Data) => {
       if ('room' in newData && 'rating' in newData) {
@@ -82,9 +82,33 @@ export const texts = {
     }
   ),
 
-  user1: new TextObject('Bruker 1', 800, 150),
-  user2: new TextObject('Bruker 2', 800, 300),
-  user3: new TextObject('Bruker 3', 800, 450),
+  user1: new TextObject('Bruker 1', 800, 300),
+  user2: new TextObject('Bruker 2', 800, 450),
+
+  peopleTotal: new TextObject(
+    'Personer totalt',
+    300,
+    300,
+    (oldData: Data, newData: Data) => {
+      if ('room' in newData && 'people' in newData) {
+        oldData['room' + newData.room] = newData.people;
+      }
+      return oldData;
+    },
+    (data: Data) => {
+      let people = 0;
+      Object.values(data).forEach((value) => (people += value as number));
+      return { people };
+    }
+  ),
+  cantine: new TextObject(
+    'Matbehov i kantina',
+    550,
+    150,
+    (_: Data, newData: Data) => {
+      return { cinnamonBuns: (newData.people as number) * 2 };
+    }
+  ),
 };
 
 texts.peopleA.arrowTo.push(texts.ratingA);
@@ -95,7 +119,10 @@ texts.noiseB.arrowTo.push(texts.ratingB);
 texts.ratingB.arrowTo.push(texts.room);
 texts.room.arrowTo.push(texts.user1);
 texts.room.arrowTo.push(texts.user2);
-texts.room.arrowTo.push(texts.user3);
+
+texts.peopleA.arrowTo.push(texts.peopleTotal);
+texts.peopleB.arrowTo.push(texts.peopleTotal);
+texts.peopleTotal.arrowTo.push(texts.cantine);
 
 const emitInterval = 10000;
 export const emitters = {
