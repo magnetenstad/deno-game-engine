@@ -13,6 +13,14 @@ export class Vec2 {
     return new Vec2(this.x + pos.x, this.y + pos.y);
   }
 
+  addX(dx: number) {
+    return new Vec2(this.x + dx, this.y);
+  }
+
+  addY(dy: number) {
+    return new Vec2(this.x, this.y + dy);
+  }
+
   snap(gridSize: number) {
     return new Vec2(
       Math.round(this.x / gridSize) * gridSize,
@@ -22,6 +30,10 @@ export class Vec2 {
 
   copy() {
     return new Vec2(this.x, this.y);
+  }
+
+  lengthTo(pos: Vec2) {
+    return Math.sqrt((this.x - pos.x) ** 2 + (this.y - pos.y) ** 2);
   }
 }
 
