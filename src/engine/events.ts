@@ -11,10 +11,10 @@ export const Input = {
 };
 
 document.addEventListener('keydown', (ev) => {
-  keysJustPressed.add(ev.key);
+  keysJustPressed.add(ev.key.toLowerCase());
 });
 document.addEventListener('keyup', (ev) => {
-  keysJustReleased.add(ev.key);
+  keysJustReleased.add(ev.key.toLowerCase());
 });
 
 export const handleInput = (game: Game) => {

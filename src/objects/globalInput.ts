@@ -35,6 +35,8 @@ export class GlobalInput extends GameObject {
       this.keys = '';
     } else if (key.length == 1) {
       this.keys += key;
+    } else {
+      this.keys = '';
     }
   }
 

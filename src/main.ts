@@ -1,7 +1,6 @@
 import { Game } from './engine/game.ts';
 import { Emitter } from './objects/emitter.ts';
 import { GlobalInput } from './objects/globalInput.ts';
-import { MainInputObject } from './objects/inputObject.ts';
 import { Data, TextObject } from './objects/textObject.ts';
 
 export const game = new Game();
@@ -16,8 +15,6 @@ game.setOptions({
 });
 
 game.setImageAssets(ImageAssets);
-
-game.addGameObject(new MainInputObject());
 
 export const globalInput = new GlobalInput();
 game.addGameObject(globalInput);
@@ -82,7 +79,7 @@ export const texts = {
           room = key;
         }
       }
-      return { room };
+      return room ? { room } : {};
     }
   ),
 
