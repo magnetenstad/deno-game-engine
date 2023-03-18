@@ -30,7 +30,7 @@ export class TextObject extends PositionObject {
 
   draw(_t: number): void {
     this.arrowTo.forEach((other) => {
-      drawArrow(this.pos.addX(64), other.pos.addX(-16), 2, '#222222');
+      drawArrow(this.pos.addX(64), other.pos.addX(-16), 2, '#333333');
     });
 
     drawText(this.text, this.pos.x, this.pos.y);

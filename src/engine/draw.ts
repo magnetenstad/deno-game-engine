@@ -89,3 +89,10 @@ export const drawArrow = (from: Vec2, to: Vec2, width = 2, color = 'white') => {
   ctx.stroke();
   ctx.restore();
 };
+
+export const drawOutline = (x: number, y: number, w: number, h: number) => {
+  ctx.save();
+  ctx.strokeStyle = '#666666';
+  ctx.strokeRect(x, y, w, h);
+  ctx.restore();
+};

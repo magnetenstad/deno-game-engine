@@ -1,6 +1,7 @@
 import { Game } from './engine/game.ts';
 import { Emitter } from './objects/emitter.ts';
 import { GlobalInput } from './objects/globalInput.ts';
+import { Outline } from './objects/outline.ts';
 import { Data, TextObject } from './objects/textObject.ts';
 
 export const game = new Game();
@@ -19,67 +20,58 @@ game.setImageAssets(ImageAssets);
 export const globalInput = new GlobalInput();
 game.addGameObject(globalInput);
 
-const ratingPreScript = (oldData: Data, newData: Data) => {
-  const data = Object.assign(oldData, newData);
-  data.rating = 0;
-  if (data.noise) {
-    data.rating = (data.rating as number) - (data.noise as number);
-  }
-  if (data.people) {
-    data.rating = (data.rating as number) - (data.people as number);
-  }
-  return data;
-};
+// const ratingPreScript = (oldData: Data, newData: Data) => {
+//   const data = Object.assign(oldData, newData);
+//   data.rating = 0;
+//   if (data.noise) {
+//     data.rating = (data.rating as number) - (data.noise as number);
+//   }
+//   if (data.people) {
+//     data.rating = (data.rating as number) - (data.people as number);
+//   }
+//   return data;
+// };
 
-const ratingPostScript = (data: Data) => {
-  return {
-    rating: data.rating || undefined,
-    room: data.room || undefined,
-  };
-};
+// const ratingPostScript = (data: Data) => {
+//   return {
+//     rating: data.rating || undefined,
+//     room: data.room || undefined,
+//   };
+// };
 
 export const texts = {
   apeople: new TextObject('Antall personer A', 50, 100),
   anoise: new TextObject('Støy A', 50, 200),
-  arating: new TextObject(
-    'Rating A',
-    300,
-    150,
-    ratingPreScript,
-    ratingPostScript
-  ),
+  xpeople: new TextObject('Antall personer', 350, 150),
 
   bpeople: new TextObject('Antall personer B', 50, 400),
   bnoise: new TextObject('Støy B', 50, 500),
-  brating: new TextObject(
-    'Rating B',
-    300,
-    450,
-    ratingPreScript,
-    ratingPostScript
-  ),
+  xnoise: new TextObject('Støy', 350, 450),
 
   room: new TextObject(
     'Anbefalt arbeidsrom',
     550,
     300,
     (oldData: Data, newData: Data) => {
-      if ('room' in newData && 'rating' in newData) {
-        oldData['room' + newData.room] = newData.rating;
+      for (const key of Object.keys(newData)) {
+        oldData[key] = Object.assign(oldData[key] ?? {}, newData[key]);
       }
       return oldData;
     },
     (data: Data) => {
-      let room = '';
-      let maxValue = -Infinity;
-      for (const [key, value] of Object.entries(data)) {
-        const v = Number(value);
-        if (v > maxValue) {
-          maxValue = v;
-          room = key;
+      const result = {} as Record<string, number>;
+      for (const key of Object.keys(data)) {
+        const room = data[key] as Record<string, number>;
+        let value = 0;
+        if ('noise' in room) {
+          value -= room.noise;
         }
+        if ('people' in room) {
+          value -= room.people;
+        }
+        result[key] = value;
       }
-      return room ? { room } : {};
+      return result;
     }
   ),
 
@@ -112,12 +104,12 @@ export const texts = {
   // ),
 };
 
-texts.apeople.arrowTo.push(texts.arating);
-texts.anoise.arrowTo.push(texts.arating);
-texts.arating.arrowTo.push(texts.room);
-texts.bpeople.arrowTo.push(texts.brating);
-texts.bnoise.arrowTo.push(texts.brating);
-texts.brating.arrowTo.push(texts.room);
+texts.apeople.arrowTo.push(texts.xpeople);
+texts.anoise.arrowTo.push(texts.xnoise);
+texts.xpeople.arrowTo.push(texts.room);
+texts.bpeople.arrowTo.push(texts.xpeople);
+texts.bnoise.arrowTo.push(texts.xnoise);
+texts.xnoise.arrowTo.push(texts.room);
 texts.room.arrowTo.push(texts.user1);
 texts.room.arrowTo.push(texts.user2);
 
@@ -125,30 +117,31 @@ texts.room.arrowTo.push(texts.user2);
 // texts.peopleB.arrowTo.push(texts.peopleTotal);
 // texts.peopleTotal.arrowTo.push(texts.cantine);
 
+const outlineA = new Outline([texts.anoise, texts.apeople], 'Rom A');
+const outlineB = new Outline([texts.bnoise, texts.bpeople], 'Rom B');
+game.addGameObject(outlineA);
+game.addGameObject(outlineB);
+
 const emitInterval = 10000;
 export const emitters = {
   apeople: new Emitter(emitInterval, (value?: number) =>
     texts.apeople.receiveData({
-      room: 'A',
-      people: value ?? Math.round(Math.random() * 10),
+      A: { people: value ?? Math.round(Math.random() * 10) },
     })
   ),
   anoise: new Emitter(emitInterval, (value?: number) =>
     texts.anoise.receiveData({
-      room: 'A',
-      noise: value ?? Math.round(Math.random()),
+      A: { noise: value ?? Math.round(Math.random()) },
     })
   ),
   bpeople: new Emitter(emitInterval, (value?: number) =>
     texts.bpeople.receiveData({
-      room: 'B',
-      people: value ?? Math.round(Math.random() * 10),
+      B: { people: value ?? Math.round(Math.random() * 10) },
     })
   ),
   bnoise: new Emitter(emitInterval, (value?: number) =>
     texts.bnoise.receiveData({
-      room: 'B',
-      noise: value ?? Math.round(Math.random()),
+      B: { noise: value ?? Math.round(Math.random()) },
     })
   ),
 } as const;
