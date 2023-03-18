@@ -59,19 +59,23 @@ export const texts = {
       return oldData;
     },
     (data: Data) => {
-      const result = {} as Record<string, number>;
+      let roomName = '';
+      let maxValue = -Infinity;
       for (const key of Object.keys(data)) {
-        const room = data[key] as Record<string, number>;
+        const roomObj = data[key] as Record<string, number>;
         let value = 20;
-        if ('noise' in room) {
-          value -= room.noise;
+        if ('noise' in roomObj) {
+          value -= roomObj.noise;
         }
-        if ('people' in room) {
-          value -= room.people;
+        if ('people' in roomObj) {
+          value -= roomObj.people;
         }
-        result[key] = value;
+        if (value > maxValue) {
+          maxValue = value;
+          roomName = key;
+        }
       }
-      return result;
+      return roomName ? { room: roomName } : {};
     }
   ),
 
