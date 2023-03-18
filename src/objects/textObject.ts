@@ -45,8 +45,8 @@ export class TextObject extends PositionObject {
 
   step(): void {
     if (this.target) {
-      this.pos.x += (this.target.pos.x - this.pos.x) * 0.03;
-      this.pos.y += (this.target.pos.y - this.pos.y) * 0.03;
+      this.pos.x += (this.target.pos.x - this.pos.x) * 0.04;
+      this.pos.y += (this.target.pos.y - this.pos.y) * 0.04;
       if (this.pos.lengthTo(this.target.pos) < 10) {
         this.target.receiveData(this.data);
         game.removeGameObject(this);

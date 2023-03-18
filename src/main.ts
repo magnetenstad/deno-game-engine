@@ -1,5 +1,6 @@
 import { Game } from './engine/game.ts';
 import { Emitter } from './objects/emitter.ts';
+import { GlobalInput } from './objects/globalInput.ts';
 import { MainInputObject } from './objects/inputObject.ts';
 import { Data, TextObject } from './objects/textObject.ts';
 
@@ -17,6 +18,9 @@ game.setOptions({
 game.setImageAssets(ImageAssets);
 
 game.addGameObject(new MainInputObject());
+
+export const globalInput = new GlobalInput();
+game.addGameObject(globalInput);
 
 const ratingPreScript = (oldData: Data, newData: Data) => {
   const data = Object.assign(oldData, newData);
@@ -38,9 +42,9 @@ const ratingPostScript = (data: Data) => {
 };
 
 export const texts = {
-  peopleA: new TextObject('Antall personer A', 50, 100),
-  noiseA: new TextObject('Støy A', 50, 200),
-  ratingA: new TextObject(
+  apeople: new TextObject('Antall personer A', 50, 100),
+  anoise: new TextObject('Støy A', 50, 200),
+  arating: new TextObject(
     'Rating A',
     300,
     150,
@@ -48,9 +52,9 @@ export const texts = {
     ratingPostScript
   ),
 
-  peopleB: new TextObject('Antall personer B', 50, 400),
-  noiseB: new TextObject('Støy B', 50, 500),
-  ratingB: new TextObject(
+  bpeople: new TextObject('Antall personer B', 50, 400),
+  bnoise: new TextObject('Støy B', 50, 500),
+  brating: new TextObject(
     'Rating B',
     300,
     450,
@@ -85,66 +89,72 @@ export const texts = {
   user1: new TextObject('Bruker 1', 800, 300),
   user2: new TextObject('Bruker 2', 800, 450),
 
-  peopleTotal: new TextObject(
-    'Personer totalt',
-    300,
-    300,
-    (oldData: Data, newData: Data) => {
-      if ('room' in newData && 'people' in newData) {
-        oldData['room' + newData.room] = newData.people;
-      }
-      return oldData;
-    },
-    (data: Data) => {
-      let people = 0;
-      Object.values(data).forEach((value) => (people += value as number));
-      return { people };
-    }
-  ),
-  cantine: new TextObject(
-    'Matbehov i kantina',
-    550,
-    150,
-    (_: Data, newData: Data) => {
-      return { cinnamonBuns: (newData.people as number) * 2 };
-    }
-  ),
+  // peopleTotal: new TextObject(
+  //   'Personer totalt',
+  //   300,
+  //   300,
+  //   (oldData: Data, newData: Data) => {
+  //     if ('room' in newData && 'people' in newData) {
+  //       oldData['room' + newData.room] = newData.people;
+  //     }
+  //     return oldData;
+  //   },
+  //   (data: Data) => {
+  //     let people = 0;
+  //     Object.values(data).forEach((value) => (people += value as number));
+  //     return { people };
+  //   }
+  // ),
+  // cantine: new TextObject(
+  //   'Matbehov i kantina',
+  //   550,
+  //   150,
+  //   (_: Data, newData: Data) => {
+  //     return { cinnamonBuns: (newData.people as number) * 2 };
+  //   }
+  // ),
 };
 
-texts.peopleA.arrowTo.push(texts.ratingA);
-texts.noiseA.arrowTo.push(texts.ratingA);
-texts.ratingA.arrowTo.push(texts.room);
-texts.peopleB.arrowTo.push(texts.ratingB);
-texts.noiseB.arrowTo.push(texts.ratingB);
-texts.ratingB.arrowTo.push(texts.room);
+texts.apeople.arrowTo.push(texts.arating);
+texts.anoise.arrowTo.push(texts.arating);
+texts.arating.arrowTo.push(texts.room);
+texts.bpeople.arrowTo.push(texts.brating);
+texts.bnoise.arrowTo.push(texts.brating);
+texts.brating.arrowTo.push(texts.room);
 texts.room.arrowTo.push(texts.user1);
 texts.room.arrowTo.push(texts.user2);
 
-texts.peopleA.arrowTo.push(texts.peopleTotal);
-texts.peopleB.arrowTo.push(texts.peopleTotal);
-texts.peopleTotal.arrowTo.push(texts.cantine);
+// texts.peopleA.arrowTo.push(texts.peopleTotal);
+// texts.peopleB.arrowTo.push(texts.peopleTotal);
+// texts.peopleTotal.arrowTo.push(texts.cantine);
 
 const emitInterval = 10000;
 export const emitters = {
-  peopleA: new Emitter(emitInterval, () =>
-    texts.peopleA.receiveData({
+  apeople: new Emitter(emitInterval, (value?: number) =>
+    texts.apeople.receiveData({
       room: 'A',
-      people: Math.round(Math.random() * 10),
+      people: value ?? Math.round(Math.random() * 10),
     })
   ),
-  noiseA: new Emitter(emitInterval, () =>
-    texts.noiseA.receiveData({ room: 'A', noise: Math.round(Math.random()) })
+  anoise: new Emitter(emitInterval, (value?: number) =>
+    texts.anoise.receiveData({
+      room: 'A',
+      noise: value ?? Math.round(Math.random()),
+    })
   ),
-  peopleB: new Emitter(emitInterval, () =>
-    texts.peopleB.receiveData({
+  bpeople: new Emitter(emitInterval, (value?: number) =>
+    texts.bpeople.receiveData({
       room: 'B',
-      people: Math.round(Math.random() * 10),
+      people: value ?? Math.round(Math.random() * 10),
     })
   ),
-  noiseB: new Emitter(emitInterval, () =>
-    texts.noiseB.receiveData({ room: 'B', noise: Math.round(Math.random()) })
+  bnoise: new Emitter(emitInterval, (value?: number) =>
+    texts.bnoise.receiveData({
+      room: 'B',
+      noise: value ?? Math.round(Math.random()),
+    })
   ),
-};
+} as const;
 
 Object.values(texts).forEach((text) => {
   game.addGameObject(text);
