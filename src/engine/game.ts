@@ -4,7 +4,6 @@ import { drawClear } from './draw.ts';
 import { handleInput } from './input.ts';
 import { GameObject } from './gameObject.ts';
 import { Globals } from './globals.ts';
-import { Asset, loadImages } from './images.ts';
 
 const defaultOptions = {
   width: 480 as number,
@@ -20,7 +19,6 @@ type GameOptions = typeof defaultOptions;
 export class Game {
   options: GameOptions = defaultOptions;
   gameObjects: GameObject[] = [];
-  assets?: Record<string, Asset>;
   t = 0;
 
   constructor(isGlobalGame = true) {
@@ -75,19 +73,7 @@ export class Game {
     removeFromArray(this.gameObjects, object);
   }
 
-  setAssets(imageAssets: Record<string, Asset>) {
-    this.assets = imageAssets;
-    loadImages(this.assets, this.options.baseUrl);
-    return this;
-  }
-
   play() {
-    if (!this.assets) {
-      console.warn(
-        'Game has no image assets! Use game.setImageAssets() before calling game.play()'
-      );
-    }
-
     const interval = 1000 / this.options.fps;
     let timePrev = 0;
 

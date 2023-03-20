@@ -11,6 +11,10 @@ export class Vec2 {
     return new Vec2(this.x + pos.x, this.y + pos.y);
   }
 
+  multiply(n: number) {
+    return new Vec2(this.x * n, this.y * n);
+  }
+
   snap(gridSize: number) {
     return new Vec2(
       Math.round(this.x / gridSize) * gridSize,
@@ -22,3 +26,7 @@ export class Vec2 {
     return new Vec2(this.x, this.y);
   }
 }
+
+export const centerOfRect = (pos: Vec2, size: Vec2) => {
+  return pos.add(size.multiply(0.5));
+};

@@ -18,14 +18,14 @@ export const drawImage = (
   pos: Vec2,
   options = { smoothing: false }
 ) => {
-  if (imageAsset.image) {
+  if (imageAsset.__image) {
     ctx.imageSmoothingEnabled = options.smoothing;
     ctx.drawImage(
-      imageAsset.image,
+      imageAsset.__image,
       pos.x,
       pos.y,
-      imageAsset.image.width,
-      imageAsset.image.height
+      imageAsset.__image.width,
+      imageAsset.__image.height
     );
   }
 };
