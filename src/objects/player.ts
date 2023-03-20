@@ -1,6 +1,7 @@
-import { drawImage } from '../engine/draw.ts';
+import { drawImage, drawLine } from '../engine/draw.ts';
 import { Input } from '../engine/events.ts';
-import { Vec2, PositionObject } from '../engine/position.ts';
+import { Vec2 } from '../engine/math.ts';
+import { PositionObject } from '../engine/position.ts';
 import { Assets } from '../main.ts';
 
 const size = 16;
@@ -17,6 +18,7 @@ export class Player extends PositionObject {
 
   draw(): void {
     drawImage(this.image, this.pos);
+    drawLine(this.pos, Input.mouse.pos);
   }
 
   step(): void {
