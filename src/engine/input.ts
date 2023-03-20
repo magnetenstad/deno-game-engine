@@ -36,7 +36,7 @@ export const Input = {
 };
 
 const eventPosition = (ev: MouseEvent) => {
-  const scale = Globals.game?.options.scale ?? 1;
+  const scale = Globals.game?.__options.scale ?? 1;
   return new Vec2(
     (ev.pageX - __canvasElement.offsetLeft) / scale,
     (ev.pageY - __canvasElement.offsetTop) / scale
@@ -61,7 +61,7 @@ document.addEventListener('mousemove', (ev) => {
   const pos = eventPosition(ev);
   Input.mouse.pos.x = pos.x;
   Input.mouse.pos.y = pos.y;
-  const scale = Globals.game?.options.scale ?? 1;
+  const scale = Globals.game?.__options.scale ?? 1;
   if (
     Input.mouse.pos.isInside(
       new Vec2(0, 0),

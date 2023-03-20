@@ -4,6 +4,7 @@ import { handleInput } from './input.ts';
 import { GameObject } from './gameObject.ts';
 import { Globals } from './globals.ts';
 import { Canvas } from './draw.ts';
+import { Vec2 } from './math.ts';
 
 const defaultOptions = {
   width: 480 as number,
@@ -17,38 +18,43 @@ const defaultOptions = {
 type GameOptions = typeof defaultOptions;
 
 export class Game {
-  options: GameOptions = defaultOptions;
-  gameObjects: GameObject[] = [];
-  canvas: Canvas;
-  t = 0;
+  __options: GameOptions = defaultOptions;
+  __gameObjects: GameObject[] = [];
+  __canvas: Canvas;
+  __t = 0;
 
   constructor(isGlobalGame = true) {
     if (isGlobalGame) {
       Globals.game = this;
     }
-    this.canvas = new Canvas(__canvasElement);
+    this.__canvas = new Canvas(__canvasElement);
     this.setOptions(defaultOptions);
   }
 
   setOptions(options: Partial<GameOptions>) {
-    this.options = {
-      ...this.options,
+    this.__options = {
+      ...this.__options,
       ...options,
     };
 
-    __canvasElement.width = this.options.width * this.options.scale;
-    __canvasElement.height = this.options.height * this.options.scale;
-    this.canvas.__ctx.scale(this.options.scale, this.options.scale);
+    const canvasSize = this.getCanvasSize().multiply(this.__options.scale);
+    __canvasElement.width = canvasSize.x;
+    __canvasElement.height = canvasSize.y;
+    this.__canvas.__ctx.scale(this.__options.scale, this.__options.scale);
 
     return this;
   }
 
+  getCanvasSize() {
+    return new Vec2(this.__options.width, this.__options.height);
+  }
+
   addObject(object: GameObject) {
-    this.gameObjects.push(object);
+    this.__gameObjects.push(object);
   }
 
   removeObject(object: GameObject) {
-    removeFromArray(this.gameObjects, object);
+    removeFromArray(this.__gameObjects, object);
   }
 
   play() {
@@ -57,7 +63,7 @@ export class Game {
     const gameLoop = (time: number) => {
       requestAnimationFrame(gameLoop);
       const delta = time - timePrev;
-      const interval = 1000 / this.options.fps;
+      const interval = 1000 / this.__options.fps;
 
       if (delta > interval) {
         timePrev = time - (delta % interval);
@@ -68,30 +74,30 @@ export class Game {
     gameLoop(0);
   }
   __maybeSort() {
-    if (!this.options.zSort) return;
+    if (!this.__options.zSort) return;
     let shouldSort = false;
-    for (let i = 0; i < this.gameObjects.length; i++) {
-      if (this.gameObjects[i].__changed) {
+    for (let i = 0; i < this.__gameObjects.length; i++) {
+      if (this.__gameObjects[i].__changed) {
         shouldSort = true;
         break;
       }
     }
     if (shouldSort) {
-      this.gameObjects.sort((a, b) => a.__zIndex - b.__zIndex);
-      this.gameObjects.forEach((o) => (o.__changed = false));
+      this.__gameObjects.sort((a, b) => a.__zIndex - b.__zIndex);
+      this.__gameObjects.forEach((o) => (o.__changed = false));
     }
   }
 
   __step() {
     this.__maybeSort();
-    handleInput(this.gameObjects);
-    this.canvas.drawClear();
-    this.gameObjects.forEach((object) => {
-      if (object.draw) object.draw(this.canvas, this.t);
+    handleInput(this.__gameObjects);
+    this.__canvas.drawClear();
+    this.__gameObjects.forEach((object) => {
+      if (object.draw) object.draw(this.__canvas, this.__t);
     });
-    this.gameObjects.forEach((object) => {
+    this.__gameObjects.forEach((object) => {
       if (object.step) object.step();
     });
-    this.t++;
+    this.__t++;
   }
 }
