@@ -42,11 +42,15 @@ document.addEventListener('mousemove', (ev) => {
 export const handleInput = (gameObjects: GameObject[]) => {
   keysJustPressed.forEach((key) => {
     activeKeys.add(key);
-    gameObjects.forEach((obj) => obj.onKeyPress(key));
+    gameObjects.forEach((obj) => {
+      if (obj.onKeyPress) obj.onKeyPress(key);
+    });
   });
   keysJustReleased.forEach((key) => {
     activeKeys.delete(key);
-    gameObjects.forEach((obj) => obj.onKeyRelease(key));
+    gameObjects.forEach((obj) => {
+      if (obj.onKeyRelease) obj.onKeyRelease(key);
+    });
   });
   keysJustPressed.clear();
   keysJustReleased.clear();

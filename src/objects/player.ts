@@ -7,7 +7,6 @@ import { PositionObject } from '../engine/position.ts';
 const size = 16;
 
 export class Player extends PositionObject {
-  speed = 10;
   image = new ImageAsset('./player.png');
   target: Vec2;
 

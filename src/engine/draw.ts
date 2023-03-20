@@ -6,6 +6,8 @@ export type DrawStyle = {
   strokeStyle?: string;
   lineWidth?: number;
   fillStyle?: string;
+  font?: string;
+  fontSize?: number;
 };
 
 export class Canvas {
@@ -23,10 +25,11 @@ export class Canvas {
 
   withStyle = (style: DrawStyle, func: () => void) => {
     this.__ctx.save();
-    if (style.strokeStyle !== undefined)
-      this.__ctx.strokeStyle = style.strokeStyle;
+    if (style.strokeStyle) this.__ctx.strokeStyle = style.strokeStyle;
     if (style.lineWidth !== undefined) this.__ctx.lineWidth = style.lineWidth;
-    if (style.fillStyle !== undefined) this.__ctx.fillStyle = style.fillStyle;
+    if (style.fillStyle) this.__ctx.fillStyle = style.fillStyle;
+    if (style.font || style.fontSize)
+      this.__ctx.font = `${style.fontSize ?? 8}px ${style.font ?? 'arial'}`;
     func();
     this.__ctx.restore();
   };
@@ -105,5 +108,15 @@ export class Canvas {
       _b.y = _a.y + options.minLength * Math.sin(angle);
     }
     this.drawPath([_a, _b]);
+  }
+
+  drawText(
+    text: string,
+    pos: Vec2,
+    style: DrawStyle = { fillStyle: 'white', font: 'arial', fontSize: 8 }
+  ) {
+    this.withStyle(style, () => {
+      this.__ctx.fillText(text, pos.x, pos.y + (style.fontSize ?? 0));
+    });
   }
 }

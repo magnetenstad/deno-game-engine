@@ -86,8 +86,12 @@ export class Game {
     this.__maybeSort();
     handleInput(this.gameObjects);
     this.canvas.drawClear();
-    this.gameObjects.forEach((object) => object.draw(this.canvas, this.t));
-    this.gameObjects.forEach((object) => object.step());
+    this.gameObjects.forEach((object) => {
+      if (object.draw) object.draw(this.canvas, this.t);
+    });
+    this.gameObjects.forEach((object) => {
+      if (object.step) object.step();
+    });
     this.t++;
   }
 }
