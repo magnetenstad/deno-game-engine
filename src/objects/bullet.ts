@@ -1,6 +1,7 @@
 import { Canvas } from '../engine/draw.ts';
 import { PositionObject } from '../engine/gameObject.ts';
 import { Vec2 } from '../engine/math.ts';
+import { game } from '../main.ts';
 
 export class Bullet extends PositionObject {
   direction: Vec2;
@@ -17,5 +18,9 @@ export class Bullet extends PositionObject {
 
   step(): void {
     this.pos = this.pos.add(this.direction.multiply(this.speed));
+
+    const canvasSize = game.getCanvasSize();
+    if (this.pos.x < 0 || canvasSize.x < this.pos.x) this.direction.x *= -1;
+    if (this.pos.y < 0 || canvasSize.y < this.pos.y) this.direction.y *= -1;
   }
 }
