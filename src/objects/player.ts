@@ -17,7 +17,11 @@ export class Player extends PositionObject {
   }
 
   draw(c: Canvas): void {
-    c.drawLine(this.image.size().center(this.pos), Input.mouse.pos);
+    c.drawLine(this.image.size().center(this.pos), Input.mouse.pos, {
+      startOffset: 20,
+      maxLength: 20,
+      minLength: 20,
+    });
     c.drawImage(this.image, this.pos);
   }
 

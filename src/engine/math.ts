@@ -26,6 +26,10 @@ export class Vec2 {
     );
   }
 
+  lengthTo(pos: Vec2) {
+    return Math.sqrt((this.x - pos.x) ** 2 + (this.y - pos.y) ** 2);
+  }
+
   isInside(pos: Vec2, size: Vec2) {
     return (
       pos.x <= this.x &&

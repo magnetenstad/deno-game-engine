@@ -75,7 +75,35 @@ export class Canvas {
     });
   }
 
-  drawLine(a: Vec2, b: Vec2) {
-    this.drawPath([a, b]);
+  drawLine(
+    a: Vec2,
+    b: Vec2,
+    options: {
+      startOffset?: number;
+      endOffset?: number;
+      maxLength?: number;
+      minLength?: number;
+    }
+  ) {
+    const _a = a.copy();
+    const _b = b.copy();
+    const angle = Math.atan2(_b.y - _a.y, _b.x - _a.x);
+    if (options.startOffset) {
+      _a.x += options.startOffset * Math.cos(angle);
+      _a.y += options.startOffset * Math.sin(angle);
+    }
+    if (options.endOffset) {
+      _b.x += options.endOffset * Math.cos(angle);
+      _b.y += options.endOffset * Math.sin(angle);
+    }
+    const length = _a.lengthTo(_b);
+    if (options.maxLength && length > options.maxLength) {
+      _b.x = _a.x + options.maxLength * Math.cos(angle);
+      _b.y = _a.y + options.maxLength * Math.sin(angle);
+    } else if (options.minLength && length < options.minLength) {
+      _b.x = _a.x + options.minLength * Math.cos(angle);
+      _b.y = _a.y + options.minLength * Math.sin(angle);
+    }
+    this.drawPath([_a, _b]);
   }
 }
