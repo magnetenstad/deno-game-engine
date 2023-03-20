@@ -1,6 +1,12 @@
+import { Globals } from './globals.ts';
+
 export class GameObject {
   __changed = true;
   __zIndex = 0;
+
+  constructor() {
+    Globals.game?.addObject(this);
+  }
 
   step() {}
   draw(_t: number) {}

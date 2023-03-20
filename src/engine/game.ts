@@ -3,7 +3,8 @@ import { canvasElement, ctx } from './dom.ts';
 import { drawClear } from './draw.ts';
 import { handleInput } from './events.ts';
 import { GameObject } from './gameObject.ts';
-import { ImageAsset, loadImages } from './images.ts';
+import { Globals } from './globals.ts';
+import { Asset, loadImages } from './images.ts';
 
 const defaultOptions = {
   width: 480 as number,
@@ -19,11 +20,14 @@ type GameOptions = typeof defaultOptions;
 export class Game {
   options: GameOptions = defaultOptions;
   gameObjects: GameObject[] = [];
-  imageAssets?: Record<string, ImageAsset>;
+  assets?: Record<string, Asset>;
   t = 0;
 
-  constructor() {
+  constructor(isGlobalGame = true) {
     this.setOptions(defaultOptions);
+    if (isGlobalGame) {
+      Globals.game = this;
+    }
   }
 
   setOptions(options: Partial<GameOptions>) {
@@ -35,6 +39,8 @@ export class Game {
     canvasElement.width = this.options.width * this.options.scale;
     canvasElement.height = this.options.height * this.options.scale;
     ctx.scale(this.options.scale, this.options.scale);
+
+    return this;
   }
 
   __maybeSort() {
@@ -61,21 +67,22 @@ export class Game {
     this.t++;
   }
 
-  addGameObject(object: GameObject) {
+  addObject(object: GameObject) {
     this.gameObjects.push(object);
   }
 
-  removeGameObject(object: GameObject) {
+  removeObject(object: GameObject) {
     removeFromArray(this.gameObjects, object);
   }
 
-  setImageAssets(imageAssets: Record<string, ImageAsset>) {
-    this.imageAssets = imageAssets;
-    loadImages(this.imageAssets, this.options.baseUrl);
+  setAssets(imageAssets: Record<string, Asset>) {
+    this.assets = imageAssets;
+    loadImages(this.assets, this.options.baseUrl);
+    return this;
   }
 
   play() {
-    if (!this.imageAssets) {
+    if (!this.assets) {
       console.warn(
         'Game has no image assets! Use game.setImageAssets() before calling game.play()'
       );

@@ -3,23 +3,19 @@ import { ImageAsset } from './engine/images.ts';
 import { Player } from './objects/player.ts';
 import { RectangleSinObject } from './objects/rectangleObject.ts';
 
-const game = new Game();
-
-export const ImageAssets = {
+export const Assets = {
   player: new ImageAsset('player.png'),
-};
+} as const;
 
-game.setOptions({
+const game = new Game().setAssets(Assets).setOptions({
   width: 480,
   height: 320,
   scale: 2,
   fps: 60,
 });
 
-game.setImageAssets(ImageAssets);
-
-game.addGameObject(new RectangleSinObject(10, 10, 50, 50));
-game.addGameObject(new RectangleSinObject(100, 250, 50, 50));
-game.addGameObject(new Player(100, 250));
+new RectangleSinObject(10, 10, 50, 50);
+new RectangleSinObject(100, 250, 50, 50);
+new Player(100, 250);
 
 game.play();

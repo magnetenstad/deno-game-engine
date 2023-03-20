@@ -1,13 +1,13 @@
 import { drawImage } from '../engine/draw.ts';
 import { Input } from '../engine/events.ts';
 import { Vec2, PositionObject } from '../engine/position.ts';
-import { ImageAssets } from '../main.ts';
+import { Assets } from '../main.ts';
 
 const size = 16;
 
 export class Player extends PositionObject {
   speed = 10;
-  image = ImageAssets.player;
+  image = Assets.player;
   target: Vec2;
 
   constructor(x: number, y: number) {
