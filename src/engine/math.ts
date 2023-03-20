@@ -15,8 +15,8 @@ export class Vec2 {
     return new Vec2(this.x * n, this.y * n);
   }
 
-  center(offset = new Vec2(0, 0)) {
-    return offset.add(this.multiply(0.5));
+  half() {
+    return this.multiply(0.5);
   }
 
   snap(gridSize: number) {
@@ -37,6 +37,20 @@ export class Vec2 {
       pos.y <= this.y &&
       this.y <= pos.y + size.y
     );
+  }
+
+  moveTowards(pos: Vec2, length: number) {
+    return this.add(this.direction(pos).multiply(length));
+  }
+
+  direction(pos: Vec2) {
+    if (pos.y === this.y && pos.x === this.x) return new Vec2(0, 0);
+    const angle = Math.atan2(pos.y - this.y, pos.x - this.x);
+    return new Vec2(Math.cos(angle), Math.sin(angle));
+  }
+
+  round() {
+    return new Vec2(Math.round(this.x), Math.round(this.y));
   }
 
   copy() {

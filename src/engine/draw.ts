@@ -119,4 +119,17 @@ export class Canvas {
       this.__ctx.fillText(text, pos.x, pos.y + (style.fontSize ?? 0));
     });
   }
+
+  drawCircle(
+    radius: number,
+    pos: Vec2,
+    style: DrawStyle = { fillStyle: 'white' }
+  ) {
+    this.withStyle(style, () => {
+      this.__ctx.beginPath();
+      this.__ctx.arc(pos.x, pos.y, radius, 0, 2 * Math.PI);
+      this.__ctx.fill();
+      this.__ctx.stroke();
+    });
+  }
 }

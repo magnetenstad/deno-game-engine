@@ -1,22 +1,17 @@
-import { ImageAsset } from '../engine/assets.ts';
 import { Canvas } from '../engine/draw.ts';
-import { Input } from '../engine/input.ts';
-import { Vec2 } from '../engine/math.ts';
-import { PositionObject } from '../engine/position.ts';
+import { ImageObject } from '../engine/gameObject.ts';
+import { Input, MouseButton, MouseButtonEvent } from '../engine/input.ts';
+import { Bullet } from './bullet.ts';
 
 const size = 16;
 
-export class Player extends PositionObject {
-  image = new ImageAsset('./player.png');
-  target: Vec2;
-
+export class Player extends ImageObject {
   constructor(x: number, y: number) {
-    super(x, y);
-    this.target = this.pos.copy();
+    super(x, y, './player.png');
   }
 
   draw(c: Canvas): void {
-    c.drawLine(this.image.size().center(this.pos), Input.mouse.pos, {
+    c.drawLine(this.imageCenter(), Input.mouse.pos, {
       startOffset: 20,
       maxLength: 20,
       minLength: 20,
@@ -25,13 +20,18 @@ export class Player extends PositionObject {
   }
 
   step(): void {
-    const snapped = this.pos.snap(size);
-    if (Input.key('w')) this.target.y = snapped.y - size;
-    if (Input.key('a')) this.target.x = snapped.x - size;
-    if (Input.key('s')) this.target.y = snapped.y + size;
-    if (Input.key('d')) this.target.x = snapped.x + size;
-    this.pos.x += Math.sign(this.target.x - this.pos.x);
-    this.pos.y += Math.sign(this.target.y - this.pos.y);
+    const target = this.pos;
+    if (Input.key('w')) target.y -= 1;
+    if (Input.key('a')) target.x -= 1;
+    if (Input.key('s')) target.y += 1;
+    if (Input.key('d')) target.x += 1;
+    this.pos = this.pos.moveTowards(target, 1);
     this.setZIndex(this.pos.y + size);
+  }
+
+  onMousePress(ev: MouseButtonEvent): void {
+    if (ev.button === MouseButton.Left) {
+      new Bullet(this.imageCenter().moveTowards(ev.pos, 16), ev.pos);
+    }
   }
 }
