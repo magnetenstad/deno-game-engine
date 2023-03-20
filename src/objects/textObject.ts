@@ -1,5 +1,5 @@
 import { Canvas } from '../engine/draw.ts';
-import { PositionObject } from '../engine/position.ts';
+import { PositionObject } from '../engine/gameObject.ts';
 
 export class TextObject extends PositionObject {
   getText: () => string;

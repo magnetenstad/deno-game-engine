@@ -1,6 +1,6 @@
 import { Canvas } from '../engine/draw.ts';
 import { Vec2 } from '../engine/math.ts';
-import { PositionObject } from '../engine/position.ts';
+import { PositionObject } from '../engine/gameObject.ts';
 
 export class RectangleSinObject extends PositionObject {
   x0: number;
