@@ -1,5 +1,5 @@
 import { removeFromArray } from './arrays.ts';
-import { canvasElement, ctx } from './dom.ts';
+import { __canvasElement, __ctx } from './dom.ts';
 import { drawClear } from './draw.ts';
 import { handleInput } from './input.ts';
 import { GameObject } from './gameObject.ts';
@@ -34,9 +34,9 @@ export class Game {
       ...options,
     };
 
-    canvasElement.width = this.options.width * this.options.scale;
-    canvasElement.height = this.options.height * this.options.scale;
-    ctx.scale(this.options.scale, this.options.scale);
+    __canvasElement.width = this.options.width * this.options.scale;
+    __canvasElement.height = this.options.height * this.options.scale;
+    __ctx.scale(this.options.scale, this.options.scale);
 
     return this;
   }
@@ -74,12 +74,12 @@ export class Game {
   }
 
   play() {
-    const interval = 1000 / this.options.fps;
     let timePrev = 0;
 
     const gameLoop = (time: number) => {
       requestAnimationFrame(gameLoop);
       const delta = time - timePrev;
+      const interval = 1000 / this.options.fps;
 
       if (delta > interval) {
         timePrev = time - (delta % interval);

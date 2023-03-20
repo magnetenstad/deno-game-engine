@@ -1,6 +1,6 @@
 import { drawImage, drawLine } from '../engine/draw.ts';
 import { Input } from '../engine/input.ts';
-import { centerOfRect, Vec2 } from '../engine/math.ts';
+import { Vec2 } from '../engine/math.ts';
 import { PositionObject } from '../engine/position.ts';
 import { Assets } from '../main.ts';
 
@@ -17,7 +17,7 @@ export class Player extends PositionObject {
   }
 
   draw(): void {
-    drawLine(centerOfRect(this.pos, this.image.size()), Input.mouse.pos);
+    drawLine(this.image.size().center(this.pos), Input.mouse.pos);
     drawImage(this.image, this.pos);
   }
 

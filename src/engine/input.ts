@@ -1,4 +1,4 @@
-import { canvasElement } from './dom.ts';
+import { __canvasElement } from './dom.ts';
 import { Game } from './game.ts';
 import { Globals } from './globals.ts';
 import { Vec2 } from './math.ts';
@@ -16,6 +16,7 @@ export const Input = {
   },
 };
 
+const preventDefault = (event: MouseEvent) => event.preventDefault();
 document.addEventListener('keydown', (ev) => {
   keysJustPressed.add(ev.key);
 });
@@ -24,8 +25,18 @@ document.addEventListener('keyup', (ev) => {
 });
 document.addEventListener('mousemove', (ev) => {
   const scale = Globals.game?.options.scale ?? 1;
-  Input.mouse.pos.x = (ev.pageX - canvasElement.offsetLeft) / scale;
-  Input.mouse.pos.y = (ev.pageY - canvasElement.offsetTop) / scale;
+  Input.mouse.pos.x = (ev.pageX - __canvasElement.offsetLeft) / scale;
+  Input.mouse.pos.y = (ev.pageY - __canvasElement.offsetTop) / scale;
+  if (
+    Input.mouse.pos.isInside(
+      new Vec2(0, 0),
+      new Vec2(__canvasElement.width / scale, __canvasElement.height / scale)
+    )
+  ) {
+    document.addEventListener('contextmenu', preventDefault);
+  } else {
+    document.removeEventListener('contextmenu', preventDefault);
+  }
 });
 
 export const handleInput = (game: Game) => {
