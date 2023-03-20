@@ -1,14 +1,14 @@
+import { ImageAsset } from '../engine/assets.ts';
 import { drawImage, drawLine } from '../engine/draw.ts';
 import { Input } from '../engine/input.ts';
 import { Vec2 } from '../engine/math.ts';
 import { PositionObject } from '../engine/position.ts';
-import { Assets } from '../main.ts';
 
 const size = 16;
 
 export class Player extends PositionObject {
   speed = 10;
-  image = Assets.player;
+  image = new ImageAsset('./player.png');
   target: Vec2;
 
   constructor(x: number, y: number) {

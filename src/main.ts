@@ -1,5 +1,4 @@
 import { Game } from './engine/game.ts';
-import { ImageAsset } from './engine/assets.ts';
 import { Player } from './objects/player.ts';
 import { RectangleSinObject } from './objects/rectangleObject.ts';
 
@@ -9,10 +8,6 @@ const game = new Game().setOptions({
   scale: 2,
   fps: 60,
 });
-
-export const Assets = {
-  player: new ImageAsset('./player.png'),
-} as const;
 
 new RectangleSinObject(10, 10, 50, 50);
 new RectangleSinObject(100, 250, 50, 50);

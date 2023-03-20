@@ -5,13 +5,25 @@ export class GameObject {
   __zIndex = 0;
 
   constructor() {
-    Globals.game?.addObject(this);
+    this.activate();
   }
 
   step() {}
   draw(_t: number) {}
-  onKeyPress(_ev: string) {}
-  onKeyRelease(_ev: string) {}
+  onKeyPress(_key: string) {}
+  onKeyRelease(_key: string) {}
+  destructor() {}
+
+  activate() {
+    Globals.game?.addObject(this);
+  }
+  deactivate() {
+    Globals.game?.removeObject(this);
+  }
+  destruct() {
+    this.deactivate();
+    this.destructor();
+  }
 
   setZIndex(zIndex: number) {
     this.__zIndex = zIndex;
