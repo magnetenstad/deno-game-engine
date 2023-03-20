@@ -26,8 +26,8 @@ const mouseButtonsActive = new Set<MouseButton>();
 export const Input = {
   mouse: {
     pos: new Vec2(0, 0),
-    button: (e: KeyboardKey) => {
-      return keysActive.has(e);
+    button: (button: MouseButton) => {
+      return mouseButtonsActive.has(button);
     },
   },
   key: (e: KeyboardKey) => {

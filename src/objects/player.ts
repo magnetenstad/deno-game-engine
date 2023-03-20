@@ -1,6 +1,6 @@
 import { Canvas } from '../engine/draw.ts';
 import { ImageObject } from '../engine/gameObject.ts';
-import { Input, MouseButton, MouseButtonEvent } from '../engine/input.ts';
+import { Input, MouseButton } from '../engine/input.ts';
 import { Bullet } from './bullet.ts';
 
 const size = 16;
@@ -27,11 +27,12 @@ export class Player extends ImageObject {
     if (Input.key('d')) target.x += 1;
     this.pos = this.pos.moveTowards(target, 1);
     this.setZIndex(this.pos.y + size);
-  }
 
-  onMousePress(ev: MouseButtonEvent): void {
-    if (ev.button === MouseButton.Left) {
-      new Bullet(this.imageCenter().moveTowards(ev.pos, 16), ev.pos);
+    if (Input.mouse.button(MouseButton.Left)) {
+      new Bullet(
+        this.imageCenter().moveTowards(Input.mouse.pos, 16),
+        Input.mouse.pos
+      );
     }
   }
 }
