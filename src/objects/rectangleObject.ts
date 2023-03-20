@@ -1,4 +1,4 @@
-import { drawRect } from '../engine/draw.ts';
+import { Canvas } from '../engine/draw.ts';
 import { Vec2 } from '../engine/math.ts';
 import { PositionObject } from '../engine/position.ts';
 
@@ -13,8 +13,8 @@ export class RectangleSinObject extends PositionObject {
     this.setZIndex(this.pos.y + this.size.y);
   }
 
-  draw(t: number): void {
+  draw(c: Canvas, t: number): void {
     this.pos.x = this.x0 + Math.sin(t / 40) * 100;
-    drawRect(this.pos, this.size);
+    c.drawRect(this.pos, this.size);
   }
 }

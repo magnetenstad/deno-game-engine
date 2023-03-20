@@ -1,5 +1,5 @@
 import { __canvasElement } from './dom.ts';
-import { Game } from './game.ts';
+import { GameObject } from './gameObject.ts';
 import { Globals } from './globals.ts';
 import { Vec2 } from './math.ts';
 
@@ -39,14 +39,14 @@ document.addEventListener('mousemove', (ev) => {
   }
 });
 
-export const handleInput = (game: Game) => {
+export const handleInput = (gameObjects: GameObject[]) => {
   keysJustPressed.forEach((key) => {
     activeKeys.add(key);
-    game.gameObjects.forEach((obj) => obj.onKeyPress(key));
+    gameObjects.forEach((obj) => obj.onKeyPress(key));
   });
   keysJustReleased.forEach((key) => {
     activeKeys.delete(key);
-    game.gameObjects.forEach((obj) => obj.onKeyRelease(key));
+    gameObjects.forEach((obj) => obj.onKeyRelease(key));
   });
   keysJustPressed.clear();
   keysJustReleased.clear();

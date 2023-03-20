@@ -12,12 +12,6 @@ if (!__canvasElement) {
   console.error('Could not find #canvas!');
 }
 
-export const __ctx = __canvasElement.getContext('2d')!;
-
-if (!__ctx) {
-  console.error('Could not get context of canvas!');
-}
-
 export const __assetsDiv = document.body.querySelector(
   '#assets'
 )! as HTMLDivElement;

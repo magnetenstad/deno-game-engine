@@ -1,5 +1,5 @@
 import { ImageAsset } from '../engine/assets.ts';
-import { drawImage, drawLine } from '../engine/draw.ts';
+import { Canvas } from '../engine/draw.ts';
 import { Input } from '../engine/input.ts';
 import { Vec2 } from '../engine/math.ts';
 import { PositionObject } from '../engine/position.ts';
@@ -16,9 +16,9 @@ export class Player extends PositionObject {
     this.target = this.pos.copy();
   }
 
-  draw(): void {
-    drawLine(this.image.size().center(this.pos), Input.mouse.pos);
-    drawImage(this.image, this.pos);
+  draw(c: Canvas): void {
+    c.drawLine(this.image.size().center(this.pos), Input.mouse.pos);
+    c.drawImage(this.image, this.pos);
   }
 
   step(): void {

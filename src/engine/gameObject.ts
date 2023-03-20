@@ -1,3 +1,4 @@
+import { Canvas } from './draw.ts';
 import { Globals } from './globals.ts';
 
 export class GameObject {
@@ -9,7 +10,7 @@ export class GameObject {
   }
 
   step() {}
-  draw(_t: number) {}
+  draw(_c: Canvas, _t: number) {}
   onKeyPress(_key: string) {}
   onKeyRelease(_key: string) {}
   destructor() {}
