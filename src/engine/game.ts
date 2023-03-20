@@ -1,7 +1,7 @@
 import { removeFromArray } from './arrays.ts';
 import { canvasElement, ctx } from './dom.ts';
 import { drawClear } from './draw.ts';
-import { handleInput } from './events.ts';
+import { handleInput } from './input.ts';
 import { GameObject } from './gameObject.ts';
 import { Globals } from './globals.ts';
 import { Asset, loadImages } from './images.ts';

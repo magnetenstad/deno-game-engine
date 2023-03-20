@@ -1,5 +1,5 @@
 import { drawImage, drawLine } from '../engine/draw.ts';
-import { Input } from '../engine/events.ts';
+import { Input } from '../engine/input.ts';
 import { Vec2 } from '../engine/math.ts';
 import { PositionObject } from '../engine/position.ts';
 import { Assets } from '../main.ts';
