@@ -1,5 +1,5 @@
 import { __canvasElement, __ctx } from './dom.ts';
-import { ImageAsset } from './images.ts';
+import { ImageAsset } from './assets.ts';
 import { Vec2 } from './math.ts';
 
 export type DrawStyle = {

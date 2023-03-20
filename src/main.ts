@@ -1,5 +1,5 @@
 import { Game } from './engine/game.ts';
-import { ImageAsset } from './engine/images.ts';
+import { ImageAsset } from './engine/assets.ts';
 import { Player } from './objects/player.ts';
 import { RectangleSinObject } from './objects/rectangleObject.ts';
 
