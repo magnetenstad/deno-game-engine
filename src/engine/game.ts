@@ -22,6 +22,7 @@ export class Game {
   __gameObjects: GameObject[] = [];
   __canvas: Canvas;
   __t = 0;
+  currentFps = 0;
 
   constructor(isGlobalGame = true) {
     if (isGlobalGame) {
@@ -58,15 +59,17 @@ export class Game {
   }
 
   play() {
+    let timePrevMod = 0;
     let timePrev = 0;
 
     const gameLoop = (time: number) => {
       requestAnimationFrame(gameLoop);
-      const delta = time - timePrev;
+      const delta = time - timePrevMod;
       const interval = 1000 / this.__options.fps;
-
-      if (delta > interval) {
-        timePrev = time - (delta % interval);
+      if (delta >= interval) {
+        timePrevMod = time - (delta % interval);
+        this.currentFps = 1000 / (time - timePrev);
+        timePrev = time;
         this.__step();
       }
     };

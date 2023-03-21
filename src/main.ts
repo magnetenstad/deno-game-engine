@@ -12,5 +12,6 @@ export const game = new Game().setOptions({
 export const player = new Player(100, 250);
 new TextObject(() => `Player: ${JSON.stringify(player.pos)}`, 0, 0);
 new TextObject(() => `Objects: ${game.__gameObjects.length}`, 0, 16);
+new TextObject(() => `FPS: ${game.currentFps.toFixed(1)}`, 0, 32);
 
 game.play();
