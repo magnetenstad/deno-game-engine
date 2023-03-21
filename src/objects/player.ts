@@ -19,13 +19,14 @@ export class Player extends ImageObject {
     c.drawImage(this.image, this.pos);
   }
 
-  step(): void {
-    const target = this.pos;
+  step(dtFactor: number): void {
+    const target = this.pos.copy();
     if (Input.key('w')) target.y -= 1;
     if (Input.key('a')) target.x -= 1;
     if (Input.key('s')) target.y += 1;
     if (Input.key('d')) target.x += 1;
-    this.pos = this.pos.moveTowards(target, 1);
+    this.pos = this.pos.moveTowards(target, 1.5 * dtFactor);
+
     this.setZIndex(this.pos.y + size);
 
     if (Input.mouse.button(MouseButton.Left)) {

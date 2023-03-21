@@ -12,7 +12,7 @@ export abstract class GameObject {
     this.activate();
   }
 
-  step?(): void;
+  step?(dtFactor: number): void;
   draw?(c: Canvas, t: number): void;
   onMousePress?(ev: MouseButtonEvent): void;
   onMouseRelease?(ev: MouseButtonEvent): void;

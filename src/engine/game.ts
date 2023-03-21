@@ -99,7 +99,8 @@ export class Game {
       if (object.draw) object.draw(this.__canvas, this.__t);
     });
     this.__gameObjects.forEach((object) => {
-      if (object.step) object.step();
+      if (object.step)
+        object.step(Math.round(this.__options.fps / this.currentFps));
     });
     this.__t++;
   }

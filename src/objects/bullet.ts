@@ -16,8 +16,8 @@ export class Bullet extends PositionObject {
     c.drawCircle(3, this.pos);
   }
 
-  step(): void {
-    this.pos = this.pos.add(this.direction.multiply(this.speed));
+  step(dtFactor: number): void {
+    this.pos = this.pos.add(this.direction.multiply(this.speed * dtFactor));
 
     const canvasSize = game.getCanvasSize();
     if (this.pos.x < 0 || canvasSize.x < this.pos.x) this.direction.x *= -1;
