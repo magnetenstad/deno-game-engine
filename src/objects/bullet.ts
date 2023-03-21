@@ -10,6 +10,8 @@ export class Bullet extends PositionObject {
   constructor(pos: Vec2, target: Vec2) {
     super(pos.x, pos.y);
     this.direction = pos.direction(target);
+
+    setTimeout(() => this.destruct(), 2000);
   }
 
   draw(c: Canvas): void {
