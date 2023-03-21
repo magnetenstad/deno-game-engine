@@ -3,8 +3,6 @@ import { ImageObject } from '../engine/gameObject.ts';
 import { Input, MouseButton } from '../engine/input.ts';
 import { Bullet } from './bullet.ts';
 
-const size = 16;
-
 export class Player extends ImageObject {
   constructor(x: number, y: number) {
     super(x, y, './player.png');
@@ -27,7 +25,7 @@ export class Player extends ImageObject {
     if (Input.key('d')) target.x += 1;
     this.pos = this.pos.moveTowards(target, 1.5 * dtFactor);
 
-    this.setZIndex(this.pos.y + size);
+    this.setZIndex(this.pos.y + this.image.size().y);
 
     if (Input.mouse.button(MouseButton.Left)) {
       new Bullet(
