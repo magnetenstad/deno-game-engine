@@ -1,7 +1,7 @@
 import { Canvas } from '../engine/draw.ts';
 import { PositionObject } from '../engine/gameObject.ts';
 
-export class TextObject extends PositionObject {
+export class Text extends PositionObject {
   getText: () => string;
 
   constructor(getText: () => string, x: number, y: number) {
