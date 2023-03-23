@@ -12,13 +12,13 @@ body {
   margin: 0;
 }
 
-#app {
+#game {
   display: flex;
   justify-content: center;
   align-items: center;
   margin-top: 1em;
 }
 
-#canvas {
+.gameCanvas {
   border: solid white 1px;
 }

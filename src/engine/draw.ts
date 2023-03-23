@@ -1,4 +1,3 @@
-import { __canvasElement } from './dom.ts';
 import { ImageAsset } from './assets.ts';
 import { Vec2 } from './math.ts';
 
@@ -11,11 +10,15 @@ export type DrawStyle = {
 };
 
 export class Canvas {
+  __parent: HTMLElement;
   __canvasElement: HTMLCanvasElement;
   __ctx: CanvasRenderingContext2D;
 
-  constructor(canvasElement: HTMLCanvasElement) {
-    this.__canvasElement = canvasElement;
+  constructor(parent: HTMLElement) {
+    this.__parent = parent;
+    this.__canvasElement = document.createElement('canvas');
+    this.__canvasElement.classList.add('gameCanvas');
+    this.__parent.appendChild(this.__canvasElement);
     this.__ctx = this.__canvasElement.getContext('2d')!;
 
     if (!this.__ctx) {
@@ -41,7 +44,12 @@ export class Canvas {
   }
 
   drawClear() {
-    this.__ctx.clearRect(0, 0, __canvasElement.width, __canvasElement.height);
+    this.__ctx.clearRect(
+      0,
+      0,
+      this.__canvasElement.width,
+      this.__canvasElement.height
+    );
   }
 
   drawImage = (

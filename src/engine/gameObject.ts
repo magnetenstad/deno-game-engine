@@ -1,12 +1,13 @@
 import { Canvas } from './draw.ts';
-import { Globals } from './globals.ts';
 import { KeyboardKey, MouseButtonEvent } from './input.ts';
 import { ImageAsset } from './assets.ts';
 import { Vec2 } from './math.ts';
+import { Game } from './game.ts';
 
 export abstract class GameObject {
   __changed = true;
   __zIndex = 0;
+  __game?: Game;
 
   constructor() {
     this.activate();
@@ -20,12 +21,19 @@ export abstract class GameObject {
   onKeyRelease?(key: KeyboardKey): void;
   destructor?(): void;
 
-  activate() {
-    Globals.game?.addObject(this);
+  activate(game?: Game) {
+    if (game) {
+      this.deactivate();
+      this.__game = game;
+    }
+    this.__game?.addObject(this);
+    return this;
   }
+
   deactivate() {
-    Globals.game?.removeObject(this);
+    this.__game?.removeObject(this);
   }
+
   destruct() {
     this.deactivate();
     if (this.destructor) {
@@ -55,6 +63,14 @@ export class ImageObject extends PositionObject {
   constructor(x: number, y: number, imagePath: string) {
     super(x, y);
     this.image = new ImageAsset(imagePath);
+  }
+
+  activate(game?: Game) {
+    super.activate(game);
+    if (this.__game) {
+      this.image.__load(this.__game);
+    }
+    return this;
   }
 
   imageCenter() {

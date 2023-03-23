@@ -1,8 +1,6 @@
 import { removeFromArray } from './arrays.ts';
-import { __canvasElement } from './dom.ts';
-import { handleInput } from './input.ts';
+import { initializeGameInput } from './input.ts';
 import { GameObject } from './gameObject.ts';
-import { Globals } from './globals.ts';
 import { Canvas } from './draw.ts';
 import { Vec2 } from './math.ts';
 
@@ -18,18 +16,29 @@ const defaultOptions = {
 type GameOptions = typeof defaultOptions;
 
 export class Game {
+  __gameDiv: HTMLDivElement;
+  __assetsDiv: HTMLDivElement;
   __options: GameOptions = defaultOptions;
   __gameObjects: GameObject[] = [];
   __canvas: Canvas;
   __t = 0;
   currentFps = 0;
+  input: ReturnType<typeof initializeGameInput>;
 
-  constructor(isGlobalGame = true) {
-    if (isGlobalGame) {
-      Globals.game = this;
+  constructor(gameDiv: Element | null) {
+    if (!gameDiv) {
+      throw new Error('Element passed to Game() is null!');
     }
-    this.__canvas = new Canvas(__canvasElement);
+    if (!(gameDiv instanceof HTMLDivElement)) {
+      throw new Error('Element passed to Game() is not an HTMLDivElement!');
+    }
+    this.__gameDiv = gameDiv;
+    this.__canvas = new Canvas(this.__gameDiv);
+    this.__assetsDiv = document.createElement('div');
+    this.__assetsDiv.hidden = true;
+    this.__gameDiv.appendChild(this.__assetsDiv);
     this.setOptions(defaultOptions);
+    this.input = initializeGameInput(this);
   }
 
   setOptions(options: Partial<GameOptions>) {
@@ -39,8 +48,8 @@ export class Game {
     };
 
     const canvasSize = this.getCanvasSize().multiply(this.__options.scale);
-    __canvasElement.width = canvasSize.x;
-    __canvasElement.height = canvasSize.y;
+    this.__canvas.__canvasElement.width = canvasSize.x;
+    this.__canvas.__canvasElement.height = canvasSize.y;
     this.__canvas.__ctx.scale(this.__options.scale, this.__options.scale);
 
     return this;
@@ -93,7 +102,7 @@ export class Game {
 
   __step() {
     this.__maybeSort();
-    handleInput(this.__gameObjects);
+    this.input.__handleInput(this.__gameObjects);
     this.__canvas.drawClear();
     this.__gameObjects.forEach((object) => {
       if (object.draw) object.draw(this.__canvas, this.__t);

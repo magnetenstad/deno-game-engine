@@ -1,4 +1,4 @@
-import { __assetsDiv } from './dom.ts';
+import { Game } from './game.ts';
 import { Vec2 } from './math.ts';
 
 const assets = new Map<string, unknown>();
@@ -9,13 +9,15 @@ export class ImageAsset extends Asset {
   __path: string;
   __image?: HTMLImageElement;
 
-  constructor(path: string) {
+  constructor(path: string, game?: Game) {
     super();
     this.__path = path;
-    this.__load();
+    if (game) {
+      this.__load(game);
+    }
   }
 
-  __load() {
+  __load(game: Game) {
     const memo = assets.get(this.__path);
     if (memo instanceof HTMLImageElement) {
       this.__image = memo;
@@ -26,7 +28,7 @@ export class ImageAsset extends Asset {
       assets.set(this.__path, image);
       this.__image = image;
     };
-    __assetsDiv.appendChild(image);
+    game.__assetsDiv?.appendChild(image);
   }
 
   size() {
