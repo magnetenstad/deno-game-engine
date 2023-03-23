@@ -7,5 +7,5 @@ See the `examples/` folder for example projects.
 ## Get started
 
 ```console
-npm install web-game-engine
+npm i web-game-engine
 ```
