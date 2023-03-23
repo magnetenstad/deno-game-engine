@@ -67,7 +67,8 @@ export const initializeGameInput = (game: Game) => {
 
   const input = {
     mouse: {
-      pos: new Vec2(0, 0),
+      canvasPos: new Vec2(0, 0),
+      worldPos: new Vec2(0, 0),
       button: (button: MouseButton) => {
         return mouseButtonsActive.has(button);
       },
@@ -94,12 +95,15 @@ export const initializeGameInput = (game: Game) => {
   });
   const preventDefault = (event: MouseEvent) => event.preventDefault();
   document.addEventListener('mousemove', (ev) => {
-    const pos = eventPosition(ev);
-    input.mouse.pos.x = pos.x;
-    input.mouse.pos.y = pos.y;
+    input.mouse.canvasPos = eventPosition(ev);
+    const camera = game.__canvas.__camera;
+    input.mouse.worldPos = camera
+      ? camera.toWorldPosition(input.mouse.canvasPos)
+      : input.mouse.canvasPos;
+
     const scale = game.__options.scale ?? 1;
     if (
-      input.mouse.pos.isInside(
+      input.mouse.canvasPos.isInside(
         new Vec2(0, 0),
         new Vec2(canvasElement.width / scale, canvasElement.height / scale)
       )

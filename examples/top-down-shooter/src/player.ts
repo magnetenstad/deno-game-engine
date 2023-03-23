@@ -1,4 +1,4 @@
-import { DrawInfo, ImageObject, MouseButton, StepInfo } from 'web-game-engine';
+import { DrawInfo, ImageObject, MouseButton, StepInfo } from '../../../lib';
 import { Bullet } from './bullet';
 
 export class Player extends ImageObject {
@@ -7,7 +7,7 @@ export class Player extends ImageObject {
   }
 
   draw(info: DrawInfo): void {
-    info.canvas.drawLine(this.imageCenter(), info.input.mouse.pos, {
+    info.canvas.drawLine(this.imageCenter(), info.input.mouse.worldPos, {
       startOffset: 20,
       maxLength: 20,
       minLength: 20,
@@ -27,8 +27,8 @@ export class Player extends ImageObject {
 
     if (info.input.mouse.button(MouseButton.Left)) {
       new Bullet(
-        this.imageCenter().moveTowards(info.input.mouse.pos, 16),
-        info.input.mouse.pos
+        this.imageCenter().moveTowards(info.input.mouse.worldPos, 16),
+        info.input.mouse.worldPos
       ).activate(info.game);
     }
   }

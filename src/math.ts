@@ -7,8 +7,12 @@ export class Vec2 {
     this.y = y;
   }
 
-  add(pos: Vec2) {
+  plus(pos: Vec2) {
     return new Vec2(this.x + pos.x, this.y + pos.y);
+  }
+
+  minus(pos: Vec2) {
+    return new Vec2(this.x - pos.x, this.y - pos.y);
   }
 
   multiply(n: number) {
@@ -44,7 +48,7 @@ export class Vec2 {
   }
 
   moveTowards(pos: Vec2, length: number) {
-    return this.add(this.direction(pos).multiply(length));
+    return this.plus(this.direction(pos).multiply(length));
   }
 
   direction(pos: Vec2) {
@@ -55,6 +59,10 @@ export class Vec2 {
 
   round() {
     return new Vec2(Math.round(this.x), Math.round(this.y));
+  }
+
+  equals(other: Vec2) {
+    return this.x === other.x && this.y == other.y;
   }
 
   copy() {

@@ -1,4 +1,4 @@
-import { DrawInfo, PositionObject, StepInfo, Vec2 } from 'web-game-engine';
+import { DrawInfo, PositionObject, StepInfo, Vec2 } from '../../../lib';
 
 export class Bullet extends PositionObject {
   direction: Vec2;
@@ -16,12 +16,16 @@ export class Bullet extends PositionObject {
   }
 
   step(info: StepInfo): void {
-    this.pos = this.pos.add(
+    this.pos = this.pos.plus(
       this.direction.multiply(this.speed * info.dtFactor)
     );
 
     const canvasSize = info.game.getCanvasSize();
+    const dirPrev = this.direction.copy();
     if (this.pos.x < 0 || canvasSize.x < this.pos.x) this.direction.x *= -1;
     if (this.pos.y < 0 || canvasSize.y < this.pos.y) this.direction.y *= -1;
+    if (!this.direction.equals(dirPrev)) {
+      this.step(info);
+    }
   }
 }

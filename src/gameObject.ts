@@ -81,6 +81,6 @@ export class ImageObject extends PositionObject {
   }
 
   imageCenter() {
-    return this.pos.add(this.image.size().half());
+    return this.pos.plus(this.image.size().half());
   }
 }

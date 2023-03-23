@@ -1,6 +1,6 @@
 import { removeFromArray } from './arrays';
 import { initializeGameInput, Input } from './input';
-import { GameObject } from './gameObject';
+import { DrawInfo, GameObject } from './gameObject';
 import { Canvas } from './draw';
 import { Vec2 } from './math';
 
@@ -23,6 +23,7 @@ export class Game {
   __canvas: Canvas;
   __t = 0;
   __input: Input;
+  onDraw?: (info: DrawInfo) => void;
   currentFps = 0;
 
   constructor(gameDiv: Element | null) {
@@ -101,9 +102,25 @@ export class Game {
   }
 
   __step() {
+    const camera = this.__canvas.__camera;
+    if (camera?.target) {
+      if (!camera.posPrev.equals(camera.target?.pos)) {
+        this.__input.mouse.worldPos = this.__input.mouse.worldPos.plus(
+          camera.target?.pos.minus(camera.posPrev)
+        );
+      }
+      camera.posPrev = camera.target?.pos;
+    }
     this.__maybeSort();
     this.__input.__handleInput(this.__gameObjects);
     this.__canvas.drawClear();
+    if (this.onDraw)
+      this.onDraw({
+        game: this,
+        canvas: this.__canvas,
+        input: this.__input,
+        t: this.__t,
+      });
     this.__gameObjects.forEach((object) => {
       if (object.draw)
         object.draw({
