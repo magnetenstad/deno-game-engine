@@ -26,6 +26,7 @@ document.addEventListener('keyup', (ev) => {
   keysJustReleased.add(ev.key as KeyboardKey);
 });
 
+export type Input = ReturnType<typeof initializeGameInput>;
 export const initializeGameInput = (game: Game) => {
   const canvasElement = game.__canvas.__canvasElement;
 

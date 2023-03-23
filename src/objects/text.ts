@@ -1,5 +1,4 @@
-import { Canvas } from '../engine/draw.ts';
-import { PositionObject } from '../engine/gameObject.ts';
+import { DrawInfo, PositionObject } from '../engine/gameObject.ts';
 
 export class Text extends PositionObject {
   getText: () => string;
@@ -9,7 +8,7 @@ export class Text extends PositionObject {
     this.getText = getText;
   }
 
-  draw(c: Canvas): void {
-    c.drawText(this.getText(), this.pos);
+  draw(info: DrawInfo): void {
+    info.canvas.drawText(this.getText(), this.pos);
   }
 }

@@ -1,8 +1,15 @@
 import { Canvas } from './draw.ts';
-import { KeyboardKey, MouseButtonEvent } from './input.ts';
+import { Input, KeyboardKey, MouseButtonEvent } from './input.ts';
 import { ImageAsset } from './assets.ts';
 import { Vec2 } from './math.ts';
 import { Game } from './game.ts';
+
+export type DrawInfo = { game: Game; canvas: Canvas; t: number; input: Input };
+export type StepInfo = {
+  game: Game;
+  input: Input;
+  dtFactor: number;
+};
 
 export abstract class GameObject {
   __changed = true;
@@ -13,8 +20,8 @@ export abstract class GameObject {
     this.activate();
   }
 
-  step?(dtFactor: number): void;
-  draw?(c: Canvas, t: number): void;
+  step?(info: StepInfo): void;
+  draw?(info: DrawInfo): void;
   onMousePress?(ev: MouseButtonEvent): void;
   onMouseRelease?(ev: MouseButtonEvent): void;
   onKeyPress?(key: KeyboardKey): void;
@@ -26,12 +33,12 @@ export abstract class GameObject {
       this.deactivate();
       this.__game = game;
     }
-    this.__game?.addObject(this);
+    this.__game?.__addObject(this);
     return this;
   }
 
   deactivate() {
-    this.__game?.removeObject(this);
+    this.__game?.__removeObject(this);
   }
 
   destruct() {

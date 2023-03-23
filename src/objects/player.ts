@@ -1,7 +1,5 @@
-import { Canvas } from '../engine/draw.ts';
-import { ImageObject } from '../engine/gameObject.ts';
+import { DrawInfo, ImageObject, StepInfo } from '../engine/gameObject.ts';
 import { MouseButton } from '../engine/input.ts';
-import { game } from '../main.ts';
 import { Bullet } from './bullet.ts';
 
 export class Player extends ImageObject {
@@ -9,30 +7,30 @@ export class Player extends ImageObject {
     super(x, y, './player.png');
   }
 
-  draw(c: Canvas): void {
-    c.drawLine(this.imageCenter(), game.input.mouse.pos, {
+  draw(info: DrawInfo): void {
+    info.canvas.drawLine(this.imageCenter(), info.input.mouse.pos, {
       startOffset: 20,
       maxLength: 20,
       minLength: 20,
     });
-    c.drawImage(this.image, this.pos);
+    info.canvas.drawImage(this.image, this.pos);
   }
 
-  step(dtFactor: number): void {
+  step(info: StepInfo): void {
     const target = this.pos.copy();
-    if (game.input.key('w')) target.y -= 1;
-    if (game.input.key('a')) target.x -= 1;
-    if (game.input.key('s')) target.y += 1;
-    if (game.input.key('d')) target.x += 1;
-    this.pos = this.pos.moveTowards(target, 1.5 * dtFactor);
+    if (info.input.key('w')) target.y -= 1;
+    if (info.input.key('a')) target.x -= 1;
+    if (info.input.key('s')) target.y += 1;
+    if (info.input.key('d')) target.x += 1;
+    this.pos = this.pos.moveTowards(target, 1.5 * info.dtFactor);
 
     this.setZIndex(this.pos.y + this.image.size().y);
 
-    if (game.input.mouse.button(MouseButton.Left)) {
+    if (info.input.mouse.button(MouseButton.Left)) {
       new Bullet(
-        this.imageCenter().moveTowards(game.input.mouse.pos, 16),
-        game.input.mouse.pos
-      ).activate(game);
+        this.imageCenter().moveTowards(info.input.mouse.pos, 16),
+        info.input.mouse.pos
+      ).activate(info.game);
     }
   }
 }

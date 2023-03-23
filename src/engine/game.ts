@@ -1,5 +1,5 @@
 import { removeFromArray } from './arrays.ts';
-import { initializeGameInput } from './input.ts';
+import { initializeGameInput, Input } from './input.ts';
 import { GameObject } from './gameObject.ts';
 import { Canvas } from './draw.ts';
 import { Vec2 } from './math.ts';
@@ -22,8 +22,8 @@ export class Game {
   __gameObjects: GameObject[] = [];
   __canvas: Canvas;
   __t = 0;
+  __input: Input;
   currentFps = 0;
-  input: ReturnType<typeof initializeGameInput>;
 
   constructor(gameDiv: Element | null) {
     if (!gameDiv) {
@@ -38,7 +38,7 @@ export class Game {
     this.__assetsDiv.hidden = true;
     this.__gameDiv.appendChild(this.__assetsDiv);
     this.setOptions(defaultOptions);
-    this.input = initializeGameInput(this);
+    this.__input = initializeGameInput(this);
   }
 
   setOptions(options: Partial<GameOptions>) {
@@ -59,11 +59,11 @@ export class Game {
     return new Vec2(this.__options.width, this.__options.height);
   }
 
-  addObject(object: GameObject) {
+  __addObject(object: GameObject) {
     this.__gameObjects.push(object);
   }
 
-  removeObject(object: GameObject) {
+  __removeObject(object: GameObject) {
     removeFromArray(this.__gameObjects, object);
   }
 
@@ -102,14 +102,24 @@ export class Game {
 
   __step() {
     this.__maybeSort();
-    this.input.__handleInput(this.__gameObjects);
+    this.__input.__handleInput(this.__gameObjects);
     this.__canvas.drawClear();
     this.__gameObjects.forEach((object) => {
-      if (object.draw) object.draw(this.__canvas, this.__t);
+      if (object.draw)
+        object.draw({
+          game: this,
+          canvas: this.__canvas,
+          input: this.__input,
+          t: this.__t,
+        });
     });
     this.__gameObjects.forEach((object) => {
       if (object.step)
-        object.step(Math.round(this.__options.fps / this.currentFps));
+        object.step({
+          game: this,
+          input: this.__input,
+          dtFactor: Math.round(this.__options.fps / this.currentFps),
+        });
     });
     this.__t++;
   }

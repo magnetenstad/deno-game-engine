@@ -4,7 +4,7 @@ import { Text } from './objects/text.ts';
 
 const gameDiv = document.querySelector('#game');
 
-export const game = new Game(gameDiv).setOptions({
+const game = new Game(gameDiv).setOptions({
   width: 480,
   height: 320,
   scale: 2,
