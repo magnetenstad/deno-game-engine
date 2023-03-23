@@ -1,0 +1,36 @@
+{
+  "name": "web-game-engine",
+  "version": "1.0.1",
+  "description": "A game engine for the web",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib/**/*",
+    "bin/**/*"
+  ],
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "dev": "tsc && lib/index.js",
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/magnetenstad/web-game-engine.git"
+  },
+  "keywords": [
+    "game",
+    "engine",
+    "typescript"
+  ],
+  "author": "Magne Tenstad",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/magnetenstad/web-game-engine/issues"
+  },
+  "homepage": "https://github.com/magnetenstad/web-game-engine#readme",
+  "devDependencies": {
+    "typescript": "^5.0.2"
+  }
+}

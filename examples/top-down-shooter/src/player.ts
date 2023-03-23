@@ -1,6 +1,6 @@
-import { DrawInfo, ImageObject, StepInfo } from '../engine/gameObject.ts';
-import { MouseButton } from '../engine/input.ts';
-import { Bullet } from './bullet.ts';
+import { ImageObject, DrawInfo, StepInfo } from 'web-game-engine';
+import { MouseButton } from 'web-game-engine/lib/input';
+import { Bullet } from './bullet';
 
 export class Player extends ImageObject {
   constructor(x: number, y: number) {

@@ -1,4 +1,4 @@
-import { DrawInfo, PositionObject } from '../engine/gameObject.ts';
+import { PositionObject, DrawInfo } from 'web-game-engine';
 
 export class Text extends PositionObject {
   getText: () => string;

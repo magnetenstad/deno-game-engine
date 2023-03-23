@@ -1,6 +1,6 @@
-import { Game } from './game.ts';
-import { GameObject } from './gameObject.ts';
-import { Vec2 } from './math.ts';
+import { Game } from './game';
+import { GameObject } from './gameObject';
+import { Vec2 } from './math';
 
 export enum MouseButton {
   Left,

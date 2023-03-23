@@ -1,8 +1,8 @@
-import { removeFromArray } from './arrays.ts';
-import { initializeGameInput, Input } from './input.ts';
-import { GameObject } from './gameObject.ts';
-import { Canvas } from './draw.ts';
-import { Vec2 } from './math.ts';
+import { removeFromArray } from './arrays';
+import { initializeGameInput, Input } from './input';
+import { GameObject } from './gameObject';
+import { Canvas } from './draw';
+import { Vec2 } from './math';
 
 const defaultOptions = {
   width: 480 as number,

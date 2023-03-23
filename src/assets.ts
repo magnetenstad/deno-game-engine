@@ -1,5 +1,5 @@
-import { Game } from './game.ts';
-import { Vec2 } from './math.ts';
+import { Game } from './game';
+import { Vec2 } from './math';
 
 const assets = new Map<string, unknown>();
 

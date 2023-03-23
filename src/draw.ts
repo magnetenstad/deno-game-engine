@@ -1,5 +1,5 @@
-import { ImageAsset } from './assets.ts';
-import { Vec2 } from './math.ts';
+import { ImageAsset } from './assets';
+import { Vec2 } from './math';
 
 export type DrawStyle = {
   strokeStyle?: string;

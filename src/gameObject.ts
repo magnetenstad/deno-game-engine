@@ -1,8 +1,8 @@
-import { Canvas } from './draw.ts';
-import { Input, KeyboardKey, MouseButtonEvent } from './input.ts';
-import { ImageAsset } from './assets.ts';
-import { Vec2 } from './math.ts';
-import { Game } from './game.ts';
+import { Canvas } from './draw';
+import { Input, KeyboardKey, MouseButtonEvent } from './input';
+import { ImageAsset } from './assets';
+import { Vec2 } from './math';
+import { Game } from './game';
 
 export type DrawInfo = { game: Game; canvas: Canvas; t: number; input: Input };
 export type StepInfo = {
