@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc && vite build --base=/web-game-engine/top-down-shooter --emptyOutDir",
     "preview": "vite preview"
   },
   "devDependencies": {
@@ -13,6 +13,6 @@
     "vite": "^4.2.0"
   },
   "dependencies": {
-    "web-game-engine": "^1.0.1"
+    "web-game-engine": "^1.0.3"
   }
 }

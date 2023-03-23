@@ -1,5 +1,4 @@
-import { ImageObject, DrawInfo, StepInfo } from 'web-game-engine';
-import { MouseButton } from 'web-game-engine/lib/input';
+import { DrawInfo, ImageObject, MouseButton, StepInfo } from 'web-game-engine';
 import { Bullet } from './bullet';
 
 export class Player extends ImageObject {

@@ -1,5 +1,4 @@
-import { PositionObject, DrawInfo, StepInfo } from 'web-game-engine';
-import { Vec2 } from 'web-game-engine/lib/math';
+import { DrawInfo, PositionObject, StepInfo, Vec2 } from 'web-game-engine';
 
 export class Bullet extends PositionObject {
   direction: Vec2;

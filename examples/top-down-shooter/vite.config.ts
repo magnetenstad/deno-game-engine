@@ -8,5 +8,4 @@ export default defineConfig({
       },
     },
   },
-  base: 'web-game-engine/top-down-shooter',
 });

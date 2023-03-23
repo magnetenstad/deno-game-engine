@@ -1,12 +1,11 @@
 {
   "name": "web-game-engine",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "A game engine for the web",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
-    "lib/**/*",
-    "bin/**/*"
+    "lib/**/*"
   ],
   "directories": {
     "example": "examples"
