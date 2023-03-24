@@ -1,6 +1,6 @@
 import { removeFromArray } from './arrays';
 import { initializeGameInput, Input } from './input';
-import { DrawInfo, GameObject } from './gameObject';
+import { DrawInfo, GameObject, StepInfo } from './gameObject';
 import { Canvas } from './draw';
 import { Vec2 } from './math';
 
@@ -23,7 +23,10 @@ export class Game {
   __canvas: Canvas;
   __t = 0;
   __input: Input;
-  onDraw?: (info: DrawInfo) => void;
+  beforeDraw?: (info: DrawInfo) => void;
+  afterDraw?: (info: DrawInfo) => void;
+  beforeStep?: (info: StepInfo) => void;
+  afterStep?: (info: StepInfo) => void;
   currentFps = 0;
 
   constructor(gameDiv: Element | null) {
@@ -114,8 +117,8 @@ export class Game {
     this.__maybeSort();
     this.__input.__handleInput(this.__gameObjects);
     this.__canvas.drawClear();
-    if (this.onDraw)
-      this.onDraw({
+    if (this.beforeDraw)
+      this.beforeDraw({
         game: this,
         canvas: this.__canvas,
         input: this.__input,
@@ -130,6 +133,19 @@ export class Game {
           t: this.__t,
         });
     });
+    if (this.afterDraw)
+      this.afterDraw({
+        game: this,
+        canvas: this.__canvas,
+        input: this.__input,
+        t: this.__t,
+      });
+    if (this.beforeStep)
+      this.beforeStep({
+        game: this,
+        input: this.__input,
+        dtFactor: Math.round(this.__options.fps / this.currentFps),
+      });
     this.__gameObjects.forEach((object) => {
       if (object.step)
         object.step({
@@ -138,6 +154,12 @@ export class Game {
           dtFactor: Math.round(this.__options.fps / this.currentFps),
         });
     });
+    if (this.afterStep)
+      this.afterStep({
+        game: this,
+        input: this.__input,
+        dtFactor: Math.round(this.__options.fps / this.currentFps),
+      });
     this.__t++;
   }
 }

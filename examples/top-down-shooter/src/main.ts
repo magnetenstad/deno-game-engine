@@ -22,7 +22,7 @@ new Text(() => `FPS: ${game.currentFps.toFixed(1)}`, 8, 8, {
   gui: true,
 }).activate(game);
 
-game.onDraw = (info: DrawInfo) => {
+game.beforeDraw = (info: DrawInfo) => {
   info.canvas.drawRect(
     new Vec2(0, 0),
     new Vec2(options.width, options.height),

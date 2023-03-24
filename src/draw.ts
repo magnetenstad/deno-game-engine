@@ -23,11 +23,7 @@ export class Canvas {
     this.__canvasElement = document.createElement('canvas');
     this.__canvasElement.classList.add('gameCanvas');
     this.__parentElement.appendChild(this.__canvasElement);
-    this.__ctx = this.__canvasElement.getContext('2d')!;
-
-    if (!this.__ctx) {
-      console.error('Could not get context of canvas!');
-    }
+    this.__ctx = this.__canvasElement.getContext('2d', { alpha: false })!;
   }
 
   setCamera(camera: Camera) {
@@ -36,10 +32,11 @@ export class Canvas {
 
   withStyle(style: DrawStyle, func: () => void) {
     this.__ctx.save();
-    if (style.strokeStyle) this.__ctx.strokeStyle = style.strokeStyle;
+    if (style.strokeStyle !== undefined)
+      this.__ctx.strokeStyle = style.strokeStyle;
     if (style.lineWidth !== undefined) this.__ctx.lineWidth = style.lineWidth;
-    if (style.fillStyle) this.__ctx.fillStyle = style.fillStyle;
-    if (style.font || style.fontSize)
+    if (style.fillStyle !== undefined) this.__ctx.fillStyle = style.fillStyle;
+    if (style.font !== undefined || style.fontSize !== undefined)
       this.__ctx.font = `${style.fontSize ?? 8}px ${style.font ?? 'arial'}`;
     if (style.imageSmoothingEnabled != undefined)
       this.__ctx.imageSmoothingEnabled = style.imageSmoothingEnabled;
@@ -76,8 +73,9 @@ export class Canvas {
     this.withStyleAndPos(
       _style,
       (pos: Vec2) => {
-        if (_style.fillStyle) this.__ctx.fillRect(pos.x, pos.y, size.x, size.y);
-        if (_style.strokeStyle)
+        if (this.__ctx.fillStyle)
+          this.__ctx.fillRect(pos.x, pos.y, size.x, size.y);
+        if (this.__ctx.strokeStyle)
           this.__ctx.strokeRect(pos.x, pos.y, size.x, size.y);
       },
       pos
@@ -188,8 +186,8 @@ export class Canvas {
       (pos: Vec2) => {
         this.__ctx.beginPath();
         this.__ctx.arc(pos.x, pos.y, radius, 0, 2 * Math.PI);
-        this.__ctx.fill();
-        this.__ctx.stroke();
+        if (this.__ctx.fillStyle) this.__ctx.fill();
+        if (this.__ctx.strokeStyle) this.__ctx.stroke();
       },
       pos
     );
@@ -214,13 +212,13 @@ export class Camera {
     if (!this.target) {
       return worldPos;
     }
-    return worldPos.plus(this.target.pos).minus(this.size.half());
+    return worldPos.plus(this.target.pos).minus(this.size.half()).round();
   }
 
   toCanvasPosition(canvasPos: Vec2) {
     if (!this.target) {
       return canvasPos;
     }
-    return canvasPos.minus(this.target.pos).plus(this.size.half());
+    return canvasPos.minus(this.target.pos).plus(this.size.half()).round();
   }
 }
