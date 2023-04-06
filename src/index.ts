@@ -8,7 +8,8 @@ import {
 } from './gameObject';
 import { Vec2 } from './math';
 import { MouseButton } from './input';
-import { DrawStyle, Camera } from './draw';
+import { DrawStyle } from './draw';
+import { Camera } from './camera';
 
 export {
   Game,

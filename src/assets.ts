@@ -6,8 +6,8 @@ const assets = new Map<string, unknown>();
 export class Asset {}
 
 export class ImageAsset extends Asset {
-  __path: string;
-  __image?: HTMLImageElement;
+  private __path: string;
+  private __image?: HTMLImageElement;
 
   constructor(path: string, game?: Game) {
     super();
@@ -28,10 +28,14 @@ export class ImageAsset extends Asset {
       assets.set(this.__path, image);
       this.__image = image;
     };
-    game.__assetsDiv?.appendChild(image);
+    game.__addAssetElement(image);
   }
 
   size() {
     return new Vec2(this.__image?.width ?? 0, this.__image?.height ?? 0);
+  }
+
+  get image() {
+    return this.__image;
   }
 }

@@ -16,13 +16,13 @@ const defaultOptions = {
 type GameOptions = typeof defaultOptions;
 
 export class Game {
-  __gameDiv: HTMLDivElement;
-  __assetsDiv: HTMLDivElement;
-  __options: GameOptions = defaultOptions;
-  __gameObjects: GameObject[] = [];
-  __canvas: Canvas;
-  __t = 0;
-  __input: Input;
+  private __gameDiv: HTMLDivElement;
+  private __assetsDiv: HTMLDivElement;
+  private __options: GameOptions = defaultOptions;
+  private __gameObjects: GameObject[] = [];
+  private __canvas: Canvas;
+  private __t = 0;
+  private __input: Input;
   beforeDraw?: (info: DrawInfo) => void;
   afterDraw?: (info: DrawInfo) => void;
   beforeStep?: (info: StepInfo) => void;
@@ -42,7 +42,7 @@ export class Game {
     this.__assetsDiv.hidden = true;
     this.__gameDiv.appendChild(this.__assetsDiv);
     this.setOptions(defaultOptions);
-    this.__input = initializeGameInput(this);
+    this.__input = initializeGameInput(this.__canvas);
   }
 
   setOptions(options: Partial<GameOptions>) {
@@ -52,11 +52,17 @@ export class Game {
     };
 
     const canvasSize = this.getCanvasSize().multiply(this.__options.scale);
-    this.__canvas.__canvasElement.width = canvasSize.x;
-    this.__canvas.__canvasElement.height = canvasSize.y;
-    this.__canvas.__ctx.scale(this.__options.scale, this.__options.scale);
+    this.__canvas.setOptions({
+      width: canvasSize.x,
+      height: canvasSize.y,
+      scale: this.__options.scale,
+    });
 
     return this;
+  }
+
+  get options() {
+    return { ...this.__options };
   }
 
   getCanvasSize() {
@@ -69,6 +75,10 @@ export class Game {
 
   __removeObject(object: GameObject) {
     removeFromArray(this.__gameObjects, object);
+  }
+
+  __addAssetElement(element: HTMLElement) {
+    this.__assetsDiv?.appendChild(element);
   }
 
   play() {
@@ -89,7 +99,8 @@ export class Game {
 
     gameLoop(0);
   }
-  __maybeSort() {
+
+  private __maybeSort() {
     if (!this.__options.zSort) return;
     let shouldSort = false;
     for (let i = 0; i < this.__gameObjects.length; i++) {
@@ -104,16 +115,8 @@ export class Game {
     }
   }
 
-  __step() {
-    const camera = this.__canvas.__camera;
-    if (camera?.target) {
-      if (!camera.posPrev.equals(camera.target?.pos)) {
-        this.__input.mouse.worldPos = this.__input.mouse.worldPos.plus(
-          camera.target?.pos.minus(camera.posPrev)
-        );
-      }
-      camera.posPrev = camera.target?.pos;
-    }
+  private __step() {
+    this.__input.mouse.worldPos.plus(this.__canvas.__getCameraPositionDelta());
     this.__maybeSort();
     this.__input.__handleInput(this.__gameObjects);
     this.__canvas.drawClear();

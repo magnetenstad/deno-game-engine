@@ -1,5 +1,5 @@
 import { ImageAsset } from './assets';
-import { PositionObject } from './gameObject';
+import { Camera } from './camera';
 import { Vec2 } from './math';
 
 export type DrawStyle = {
@@ -13,10 +13,11 @@ export type DrawStyle = {
 };
 
 export class Canvas {
-  __parentElement: HTMLElement;
-  __canvasElement: HTMLCanvasElement;
-  __ctx: CanvasRenderingContext2D;
-  __camera?: Camera;
+  private __parentElement: HTMLElement;
+  private __canvasElement: HTMLCanvasElement;
+  private __ctx: CanvasRenderingContext2D;
+  private __scale?: number;
+  camera?: Camera;
 
   constructor(__parentDiv: HTMLElement) {
     this.__parentElement = __parentDiv;
@@ -26,11 +27,31 @@ export class Canvas {
     this.__ctx = this.__canvasElement.getContext('2d', { alpha: false })!;
   }
 
-  setCamera(camera: Camera) {
-    this.__camera = camera;
+  __getCameraPositionDelta() {
+    if (!this.camera?.target) return new Vec2(0, 0);
+    const positionDelta = this.camera.target.pos.minus(this.camera.posPrev);
+    this.camera.posPrev = this.camera.target?.pos;
+    return positionDelta;
   }
 
-  withStyle(style: DrawStyle, func: () => void) {
+  setOptions(options: { width?: number; height?: number; scale?: number }) {
+    this.__canvasElement.width = options.width ?? this.__canvasElement.width;
+    this.__canvasElement.height = options.height ?? this.__canvasElement.height;
+    this.__scale = options.scale ?? this.__scale;
+    if (options.scale) {
+      this.__ctx.scale(options.scale, options.scale);
+    }
+  }
+
+  get element() {
+    return this.__canvasElement;
+  }
+
+  get scale() {
+    return this.__scale;
+  }
+
+  private withStyle(style: DrawStyle, func: () => void) {
     this.__ctx.save();
     if (style.strokeStyle !== undefined)
       this.__ctx.strokeStyle = style.strokeStyle;
@@ -44,24 +65,28 @@ export class Canvas {
     this.__ctx.restore();
   }
 
-  withStyleAndPos(style: DrawStyle, func: (pos: Vec2) => void, pos: Vec2) {
+  private withStyleAndPos(
+    style: DrawStyle,
+    func: (pos: Vec2) => void,
+    pos: Vec2
+  ) {
     this.withStyle(style, () => {
-      if (this.__camera && !style.gui) {
-        func(this.__camera.toCanvasPosition(pos));
+      if (this.camera && !style.gui) {
+        func(this.camera.toCanvasPosition(pos));
       } else {
         func(pos);
       }
     });
   }
 
-  withStyleAndPositions(
+  private withStyleAndPositions(
     style: DrawStyle,
     func: (positions: Vec2[]) => void,
     positions: Vec2[]
   ) {
     this.withStyle(style, () => {
-      if (this.__camera && !style.gui) {
-        func(positions.map((pos) => this.__camera!.toCanvasPosition(pos)));
+      if (this.camera && !style.gui) {
+        func(positions.map((pos) => this.camera!.toCanvasPosition(pos)));
       } else {
         func(positions);
       }
@@ -96,13 +121,13 @@ export class Canvas {
     this.withStyleAndPos(
       _style,
       (pos: Vec2) => {
-        if (imageAsset.__image) {
+        if (imageAsset.image) {
           this.__ctx.drawImage(
-            imageAsset.__image,
+            imageAsset.image,
             pos.x,
             pos.y,
-            imageAsset.__image.width,
-            imageAsset.__image.height
+            imageAsset.image.width,
+            imageAsset.image.height
           );
         }
       },
@@ -191,34 +216,5 @@ export class Canvas {
       },
       pos
     );
-  }
-}
-
-export class Camera {
-  size: Vec2;
-  posPrev: Vec2 = new Vec2(0, 0);
-  target?: PositionObject;
-
-  constructor(size: Vec2) {
-    this.size = size;
-  }
-
-  setTarget(target: PositionObject) {
-    this.target = target;
-    return this;
-  }
-
-  toWorldPosition(worldPos: Vec2) {
-    if (!this.target) {
-      return worldPos;
-    }
-    return worldPos.plus(this.target.pos).minus(this.size.half()).round();
-  }
-
-  toCanvasPosition(canvasPos: Vec2) {
-    if (!this.target) {
-      return canvasPos;
-    }
-    return canvasPos.minus(this.target.pos).plus(this.size.half()).round();
   }
 }

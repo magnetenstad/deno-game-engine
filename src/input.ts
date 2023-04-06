@@ -1,4 +1,4 @@
-import { Game } from './game';
+import { Canvas } from './draw';
 import { GameObject } from './gameObject';
 import { Vec2 } from './math';
 
@@ -27,9 +27,8 @@ document.addEventListener('keyup', (ev) => {
 });
 
 export type Input = ReturnType<typeof initializeGameInput>;
-export const initializeGameInput = (game: Game) => {
-  const canvasElement = game.__canvas.__canvasElement;
 
+export const initializeGameInput = (canvas: Canvas) => {
   const mouseButtonsJustPressed = new Set<MouseButtonEvent>();
   const mouseButtonsJustReleased = new Set<MouseButtonEvent>();
   const mouseButtonsActive = new Set<MouseButton>();
@@ -80,32 +79,37 @@ export const initializeGameInput = (game: Game) => {
   };
 
   const eventPosition = (ev: MouseEvent) => {
-    const scale = game.__options.scale ?? 1;
+    const scale = canvas.scale ?? 1;
     return new Vec2(
-      (ev.pageX - canvasElement.offsetLeft) / scale,
-      (ev.pageY - canvasElement.offsetTop) / scale
+      (ev.pageX - canvas.element.offsetLeft) / scale,
+      (ev.pageY - canvas.element.offsetTop) / scale
     );
   };
 
   document.addEventListener('mousedown', (ev) => {
-    mouseButtonsJustPressed.add({ button: ev.button, pos: eventPosition(ev) });
+    mouseButtonsJustPressed.add({
+      button: ev.button,
+      pos: eventPosition(ev),
+    });
   });
   document.addEventListener('mouseup', (ev) => {
-    mouseButtonsJustReleased.add({ button: ev.button, pos: eventPosition(ev) });
+    mouseButtonsJustReleased.add({
+      button: ev.button,
+      pos: eventPosition(ev),
+    });
   });
   const preventDefault = (event: MouseEvent) => event.preventDefault();
   document.addEventListener('mousemove', (ev) => {
     input.mouse.canvasPos = eventPosition(ev);
-    const camera = game.__canvas.__camera;
-    input.mouse.worldPos = camera
-      ? camera.toWorldPosition(input.mouse.canvasPos)
+    input.mouse.worldPos = canvas.camera
+      ? canvas.camera.toWorldPosition(input.mouse.canvasPos)
       : input.mouse.canvasPos;
 
-    const scale = game.__options.scale ?? 1;
+    const scale = canvas.scale ?? 1;
     if (
       input.mouse.canvasPos.isInside(
         new Vec2(0, 0),
-        new Vec2(canvasElement.width / scale, canvasElement.height / scale)
+        new Vec2(canvas.element.width / scale, canvas.element.height / scale)
       )
     ) {
       document.addEventListener('contextmenu', preventDefault);
