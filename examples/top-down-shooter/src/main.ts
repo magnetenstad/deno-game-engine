@@ -13,11 +13,10 @@ const options = {
 const game = new Game(gameDiv).setOptions(options);
 
 const player = new Player(100, 250).activate(game);
-const camera = new Camera(new Vec2(480, 320)).setTarget(player);
-game.__canvas.__camera = camera;
+game.canvas.camera = new Camera(new Vec2(480, 320)).setTarget(player);
 
 new Text(() => `Player: ${JSON.stringify(player.pos)}`, 8, 8).activate(game);
-new Text(() => `Objects: ${game.__gameObjects.length}`, 8, 24).activate(game);
+new Text(() => `Objects: ${game.getGameObjectCount()}`, 8, 24).activate(game);
 new Text(() => `FPS: ${game.currentFps.toFixed(1)}`, 8, 8, {
   gui: true,
 }).activate(game);

@@ -65,8 +65,16 @@ export class Game {
     return { ...this.__options };
   }
 
+  get canvas() {
+    return this.__canvas;
+  }
+
   getCanvasSize() {
     return new Vec2(this.__options.width, this.__options.height);
+  }
+
+  getGameObjectCount() {
+    return this.__gameObjects.length;
   }
 
   __addObject(object: GameObject) {
