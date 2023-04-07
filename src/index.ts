@@ -7,6 +7,7 @@ import { Camera } from './camera';
 import { PositionObject } from './objects/positionObject';
 import { ImageObject } from './objects/imageObject';
 import { TextObject } from './objects/textObject';
+import { ExamplePlayer } from './objects/examples/examplePlayer';
 
 export {
   Game,
@@ -17,5 +18,6 @@ export {
   MouseButton,
   Camera,
   TextObject,
+  ExamplePlayer,
 };
 export type { DrawInfo, StepInfo, DrawStyle };
