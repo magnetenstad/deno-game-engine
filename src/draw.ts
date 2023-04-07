@@ -116,7 +116,12 @@ export class Canvas {
     );
   }
 
-  drawImage = (imageAsset: ImageAsset, pos: Vec2, style?: DrawStyle) => {
+  drawImage = (
+    imageAsset: ImageAsset,
+    pos: Vec2,
+    scale?: number,
+    style?: DrawStyle
+  ) => {
     const _style = Object.assign({ imageSmoothingEnabled: false }, style);
     this.withStyleAndPos(
       _style,
@@ -126,8 +131,8 @@ export class Canvas {
             imageAsset.image,
             pos.x,
             pos.y,
-            imageAsset.image.width,
-            imageAsset.image.height
+            imageAsset.image.width * (scale ?? 1),
+            imageAsset.image.height * (scale ?? 1)
           );
         }
       },

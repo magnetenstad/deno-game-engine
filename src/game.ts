@@ -1,6 +1,6 @@
 import { removeFromArray } from './arrays';
 import { initializeGameInput, Input } from './input';
-import { DrawInfo, GameObject, StepInfo } from './gameObject';
+import { DrawInfo, GameObject, StepInfo } from './objects/gameObject';
 import { Canvas } from './draw';
 import { Vec2 } from './math';
 

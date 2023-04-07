@@ -1,5 +1,5 @@
 import { Canvas } from './draw';
-import { GameObject } from './gameObject';
+import { GameObject } from './objects/gameObject';
 import { Vec2 } from './math';
 
 export enum MouseButton {

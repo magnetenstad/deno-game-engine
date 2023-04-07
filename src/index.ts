@@ -1,15 +1,12 @@
 import { Game } from './game';
-import {
-  GameObject,
-  PositionObject,
-  ImageObject,
-  DrawInfo,
-  StepInfo,
-} from './gameObject';
+import { GameObject, DrawInfo, StepInfo } from './objects/gameObject';
 import { Vec2 } from './math';
 import { MouseButton } from './input';
 import { DrawStyle } from './draw';
 import { Camera } from './camera';
+import { PositionObject } from './objects/positionObject';
+import { ImageObject } from './objects/imageObject';
+import { TextObject } from './objects/textObject';
 
 export {
   Game,
@@ -19,5 +16,6 @@ export {
   Vec2,
   MouseButton,
   Camera,
+  TextObject,
 };
 export type { DrawInfo, StepInfo, DrawStyle };

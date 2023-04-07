@@ -1,8 +1,6 @@
-import { Canvas } from './draw';
-import { Input, KeyboardKey, MouseButtonEvent } from './input';
-import { ImageAsset } from './assets';
-import { Vec2 } from './math';
-import { Game } from './game';
+import { Canvas } from '../draw';
+import { Input, KeyboardKey, MouseButtonEvent } from '../input';
+import { Game } from '../game';
 
 export type DrawInfo = { game: Game; canvas: Canvas; t: number; input: Input };
 export type StepInfo = {
@@ -51,36 +49,5 @@ export abstract class GameObject {
   setZIndex(zIndex: number) {
     this.__zIndex = zIndex;
     this.__changed = true;
-  }
-}
-
-export class PositionObject extends GameObject {
-  pos: Vec2;
-
-  constructor(x: number, y: number) {
-    super();
-    this.pos = new Vec2(x, y);
-    this.setZIndex(y);
-  }
-}
-
-export class ImageObject extends PositionObject {
-  image: ImageAsset;
-
-  constructor(x: number, y: number, imagePath: string) {
-    super(x, y);
-    this.image = new ImageAsset(imagePath);
-  }
-
-  activate(game?: Game) {
-    super.activate(game);
-    if (this.__game) {
-      this.image.__load(this.__game);
-    }
-    return this;
-  }
-
-  imageCenter() {
-    return this.pos.plus(this.image.size().half());
   }
 }

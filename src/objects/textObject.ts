@@ -1,6 +1,8 @@
-import { PositionObject, DrawInfo, DrawStyle } from '../../../lib';
+import { DrawStyle } from '../draw';
+import { DrawInfo } from './gameObject';
+import { PositionObject } from './positionObject';
 
-export class Text extends PositionObject {
+export class TextObject extends PositionObject {
   getText: () => string;
   drawStyle: DrawStyle;
 
