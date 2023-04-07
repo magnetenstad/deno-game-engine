@@ -4,10 +4,45 @@ A zero dependency 2D game engine based on the [standard Web APIs](https://develo
 
 See the `examples/` folder for example projects, and go [here](https://magne.dev/web-game-engine/) to play them.
 
-## Get started
+## Get started with Vite + web-game-engine
+
+1. Initialize a new Vite project. Choose `Vanilla` and `Typescript`
+
+```console
+npm create vite@latest
+```
+
+2. `cd` into the directory
+3. Install web-game-engine
 
 ```console
 npm i web-game-engine
 ```
 
-https://github.com/magnetenstad/web-game-engine/blob/36478639940561397db21ece715baff03d8cd4c9/examples/top-down-shooter/src/main.ts#L5-L19
+4. Delete `src/counter.ts` and `src/style.css`. Replace the contents of `src/main.ts` with
+
+```ts
+import { ExamplePlayer, Game, TextObject } from 'web-game-engine';
+
+const game = new Game(document.querySelector('#app'));
+
+new ExamplePlayer(50, 50)
+  .activate(game);
+new TextObject(() => `FPS: ${game.currentFps.toFixed(1)}`, 8, 8)
+  .activate(game);
+
+game.play();
+```
+
+5. Play the game by running in dev mode
+
+```console
+npm run dev
+```
+
+6. Build, and deploy the `dist` folder
+
+```console
+npm run build
+```
+
