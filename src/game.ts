@@ -124,7 +124,9 @@ export class Game {
   }
 
   private __step() {
-    this.__input.mouse.worldPos.plus(this.__canvas.__getCameraPositionDelta());
+    this.__input.mouse.worldPos = this.__input.mouse.worldPos.plus(
+      this.__canvas.__getCameraPositionDelta()
+    );
     this.__maybeSort();
     this.__input.__handleInput(this.__gameObjects);
     this.__canvas.drawClear();
