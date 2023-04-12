@@ -148,7 +148,7 @@ export type KeyboardKey =
   | 'x'
   | 'y'
   | 'z'
-  | 'space'
+  | ' '
   | 'enter'
   | 'alt'
   | 'ctrl'

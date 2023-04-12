@@ -73,8 +73,8 @@ export class Game {
     return new Vec2(this.__options.width, this.__options.height);
   }
 
-  getGameObjectCount() {
-    return this.__gameObjects.length;
+  getGameObjects(filter?: (o: GameObject) => boolean) {
+    return filter ? this.__gameObjects.filter(filter) : [...this.__gameObjects];
   }
 
   __addObject(object: GameObject) {

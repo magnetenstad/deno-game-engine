@@ -61,6 +61,10 @@ export class Vec2 {
     return new Vec2(Math.round(this.x), Math.round(this.y));
   }
 
+  clamp(min: Vec2, max: Vec2) {
+    return new Vec2(clamp(this.x, min.x, max.x), clamp(this.y, min.y, max.y));
+  }
+
   equals(other: Vec2) {
     return this.x === other.x && this.y == other.y;
   }
@@ -69,3 +73,7 @@ export class Vec2 {
     return new Vec2(this.x, this.y);
   }
 }
+
+export const clamp = (value: number, min: number, max: number) => {
+  return Math.max(Math.min(value, max), min);
+};
