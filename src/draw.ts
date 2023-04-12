@@ -216,6 +216,7 @@ export class Canvas {
       (pos: Vec2) => {
         this.__ctx.beginPath();
         this.__ctx.arc(pos.x, pos.y, radius, 0, 2 * Math.PI);
+        this.__ctx.closePath();
         if (this.__ctx.fillStyle) this.__ctx.fill();
         if (this.__ctx.strokeStyle) this.__ctx.stroke();
       },
