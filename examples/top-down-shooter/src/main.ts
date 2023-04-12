@@ -18,9 +18,11 @@ new TextObject(() => `Player: ${JSON.stringify(player.pos)}`, 8, 8).activate(
   game
 );
 
-new TextObject(() => `Objects: ${game.getGameObjectCount()}`, 8, 24).activate(
-  game
-);
+new TextObject(
+  () => `Objects: ${game.getGameObjects().length}`,
+  8,
+  24
+).activate(game);
 new TextObject(() => `FPS: ${game.currentFps.toFixed(1)}`, 8, 8, {
   gui: true,
 }).activate(game);
