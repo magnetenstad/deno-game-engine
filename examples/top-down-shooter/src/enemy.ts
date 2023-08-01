@@ -1,4 +1,4 @@
-import { Vec2 } from '../../../lib';
+import { Vec2, playSound } from '../../../lib';
 import { ImageObject, GameContext } from '../../../lib';
 import { randomInt } from '../../../lib/math';
 import { Bullet } from './bullet';
@@ -25,6 +25,7 @@ export class Enemy extends ImageObject {
     const bullets = ctx.game.getInstancesOfClass<Bullet>(Bullet);
     bullets.forEach((bullet) => {
       if (bullet.pos.lengthTo(this.imageCenter()) < this.image.size().x) {
+        playSound('./explosion.wav');
         bullet.destruct();
         new Enemy(this.pos.x, this.pos.y).activate(ctx.game);
         new Enemy(this.pos.x, this.pos.y).activate(ctx.game);

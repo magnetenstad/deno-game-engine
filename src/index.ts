@@ -8,6 +8,7 @@ import { PositionObject } from './objects/positionObject';
 import { ImageObject } from './objects/imageObject';
 import { TextObject } from './objects/textObject';
 import { ExamplePlayer } from './objects/examples/examplePlayer';
+import { playSound } from './audio';
 
 export {
   Game,
@@ -19,5 +20,6 @@ export {
   Camera,
   TextObject,
   ExamplePlayer,
+  playSound,
 };
 export type { DrawContext, GameContext, DrawStyle };
