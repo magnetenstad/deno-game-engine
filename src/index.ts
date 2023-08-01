@@ -1,5 +1,5 @@
 import { Game } from './game';
-import { GameObject, DrawInfo, StepInfo } from './objects/gameObject';
+import { GameObject, DrawContext, GameContext } from './objects/gameObject';
 import { Vec2 } from './math';
 import { MouseButton } from './input';
 import { DrawStyle } from './draw';
@@ -20,4 +20,4 @@ export {
   TextObject,
   ExamplePlayer,
 };
-export type { DrawInfo, StepInfo, DrawStyle };
+export type { DrawContext, GameContext, DrawStyle };

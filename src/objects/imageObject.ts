@@ -1,3 +1,4 @@
+import { DrawContext } from '..';
 import { ImageAsset } from '../assets';
 import { Game } from '../game';
 import { PositionObject } from './positionObject';
@@ -16,6 +17,10 @@ export class ImageObject extends PositionObject {
       this.image.__load(this.__game);
     }
     return this;
+  }
+
+  draw(ctx: DrawContext): void {
+    ctx.canvas.drawImage(this.image, this.pos);
   }
 
   imageCenter() {

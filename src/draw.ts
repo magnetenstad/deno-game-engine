@@ -16,7 +16,7 @@ export class Canvas {
   private __parentElement: HTMLElement;
   private __canvasElement: HTMLCanvasElement;
   private __ctx: CanvasRenderingContext2D;
-  private __scale?: number;
+  private __scale?: number = 1;
   camera?: Camera;
 
   constructor(__parentDiv: HTMLElement) {

@@ -1,5 +1,5 @@
 import { Canvas } from './draw';
-import { GameObject } from './objects/gameObject';
+import { GameObject, GameContext } from './objects/gameObject';
 import { Vec2 } from './math';
 
 export enum MouseButton {
@@ -11,7 +11,8 @@ export enum MouseButton {
 }
 
 export type MouseButtonEvent = {
-  pos: Vec2;
+  canvasPos: Vec2;
+  worldPos: Vec2;
   button: MouseButton;
 };
 
@@ -33,32 +34,32 @@ export const initializeGameInput = (canvas: Canvas) => {
   const mouseButtonsJustReleased = new Set<MouseButtonEvent>();
   const mouseButtonsActive = new Set<MouseButton>();
 
-  const handleInput = (gameObjects: GameObject[]) => {
+  const handleInput = (gameObjects: GameObject[], ctx: GameContext) => {
     mouseButtonsJustPressed.forEach((ev) => {
       mouseButtonsActive.add(ev.button);
       gameObjects.forEach((obj) => {
-        if (obj.onMousePress) obj.onMousePress(ev);
+        if (obj.onMousePress) obj.onMousePress(ev, ctx);
       });
     });
     mouseButtonsJustPressed.clear();
     mouseButtonsJustReleased.forEach((ev) => {
       mouseButtonsActive.delete(ev.button);
       gameObjects.forEach((obj) => {
-        if (obj.onMouseRelease) obj.onMouseRelease(ev);
+        if (obj.onMouseRelease) obj.onMouseRelease(ev, ctx);
       });
     });
     mouseButtonsJustReleased.clear();
     keysJustPressed.forEach((key) => {
       keysActive.add(key);
       gameObjects.forEach((obj) => {
-        if (obj.onKeyPress) obj.onKeyPress(key);
+        if (obj.onKeyPress) obj.onKeyPress(key, ctx);
       });
     });
     keysJustPressed.clear();
     keysJustReleased.forEach((key) => {
       keysActive.delete(key);
       gameObjects.forEach((obj) => {
-        if (obj.onKeyRelease) obj.onKeyRelease(key);
+        if (obj.onKeyRelease) obj.onKeyRelease(key, ctx);
       });
     });
     keysJustReleased.clear();
@@ -87,15 +88,23 @@ export const initializeGameInput = (canvas: Canvas) => {
   };
 
   document.addEventListener('mousedown', (ev) => {
+    const canvasPos = eventPosition(ev);
     mouseButtonsJustPressed.add({
       button: ev.button,
-      pos: eventPosition(ev),
+      canvasPos: canvasPos,
+      worldPos: canvas.camera
+        ? canvas.camera.toWorldPosition(input.mouse.canvasPos)
+        : canvasPos,
     });
   });
   document.addEventListener('mouseup', (ev) => {
+    const canvasPos = eventPosition(ev);
     mouseButtonsJustReleased.add({
       button: ev.button,
-      pos: eventPosition(ev),
+      canvasPos: canvasPos,
+      worldPos: canvas.camera
+        ? canvas.camera.toWorldPosition(input.mouse.canvasPos)
+        : canvasPos,
     });
   });
   const preventDefault = (event: MouseEvent) => event.preventDefault();

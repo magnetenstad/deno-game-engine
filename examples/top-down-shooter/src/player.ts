@@ -1,4 +1,10 @@
-import { DrawInfo, ImageObject, MouseButton, StepInfo } from '../../../lib';
+import {
+  DrawContext,
+  ImageObject,
+  MouseButton,
+  GameContext,
+} from '../../../lib';
+import { MouseButtonEvent } from '../../../lib/input';
 import { Bullet } from './bullet';
 
 export class Player extends ImageObject {
@@ -6,30 +12,32 @@ export class Player extends ImageObject {
     super(x, y, './player.png');
   }
 
-  draw(info: DrawInfo): void {
-    info.canvas.drawLine(this.imageCenter(), info.input.mouse.worldPos, {
+  draw(ctx: DrawContext): void {
+    ctx.canvas.drawLine(this.imageCenter(), ctx.input.mouse.worldPos, {
       startOffset: 20,
       maxLength: 20,
       minLength: 20,
     });
-    info.canvas.drawImage(this.image, this.pos);
+    ctx.canvas.drawImage(this.image, this.pos);
   }
 
-  step(info: StepInfo): void {
+  step(ctx: GameContext): void {
     const target = this.pos.copy();
-    if (info.input.key('w')) target.y -= 1;
-    if (info.input.key('a')) target.x -= 1;
-    if (info.input.key('s')) target.y += 1;
-    if (info.input.key('d')) target.x += 1;
-    this.pos = this.pos.moveTowards(target, 1.5 * info.dtFactor);
+    if (ctx.input.key('w')) target.y -= 1;
+    if (ctx.input.key('a')) target.x -= 1;
+    if (ctx.input.key('s')) target.y += 1;
+    if (ctx.input.key('d')) target.x += 1;
+    this.pos = this.pos.moveTowards(target, 1.5 * ctx.dtFactor);
 
     this.setZIndex(this.pos.y + this.image.size().y);
+  }
 
-    if (info.input.mouse.button(MouseButton.Left)) {
+  onMousePress(ev: MouseButtonEvent, ctx: GameContext): void {
+    if (ev.button == MouseButton.Left) {
       new Bullet(
-        this.imageCenter().moveTowards(info.input.mouse.worldPos, 16),
-        info.input.mouse.worldPos
-      ).activate(info.game);
+        this.imageCenter().moveTowards(ev.worldPos, 16),
+        ev.worldPos
+      ).activate(ctx.game);
     }
   }
 }

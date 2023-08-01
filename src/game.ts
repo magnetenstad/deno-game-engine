@@ -1,6 +1,6 @@
 import { removeFromArray } from './arrays';
 import { initializeGameInput, Input } from './input';
-import { DrawInfo, GameObject, StepInfo } from './objects/gameObject';
+import { DrawContext, GameObject, GameContext } from './objects/gameObject';
 import { Canvas } from './draw';
 import { Vec2 } from './math';
 
@@ -19,15 +19,15 @@ export class Game {
   private __gameDiv: HTMLDivElement;
   private __assetsDiv: HTMLDivElement;
   private __options: GameOptions = defaultOptions;
-  private __gameObjects: GameObject[] = [];
+  private __gameInstances: GameObject[] = [];
   private __canvas: Canvas;
   private __t = 0;
   private __input: Input;
   private __currentFps = 0;
-  beforeDraw?: (info: DrawInfo) => void;
-  afterDraw?: (info: DrawInfo) => void;
-  beforeStep?: (info: StepInfo) => void;
-  afterStep?: (info: StepInfo) => void;
+  beforeDraw?: (ctx: DrawContext) => void;
+  afterDraw?: (ctx: DrawContext) => void;
+  beforeStep?: (ctx: GameContext) => void;
+  afterStep?: (ctx: GameContext) => void;
 
   constructor(gameDiv: Element | null) {
     if (!gameDiv) {
@@ -77,16 +77,24 @@ export class Game {
     return new Vec2(this.__options.width, this.__options.height);
   }
 
-  getGameObjects(filter?: (o: GameObject) => boolean) {
-    return filter ? this.__gameObjects.filter(filter) : [...this.__gameObjects];
+  getInstances(filter?: (o: GameObject) => boolean) {
+    return filter
+      ? this.__gameInstances.filter(filter)
+      : [...this.__gameInstances];
+  }
+
+  getInstancesOfClass<T extends GameObject>(
+    typeT: new (...params: any[]) => T
+  ): T[] {
+    return this.getInstances((obj) => obj instanceof typeT) as T[];
   }
 
   __addObject(object: GameObject) {
-    this.__gameObjects.push(object);
+    this.__gameInstances.push(object);
   }
 
   __removeObject(object: GameObject) {
-    removeFromArray(this.__gameObjects, object);
+    removeFromArray(this.__gameInstances, object);
   }
 
   __addAssetElement(element: HTMLElement) {
@@ -114,45 +122,55 @@ export class Game {
 
   private __maybeSort() {
     if (!this.__options.zSort) return;
-    const shouldSort = this.__gameObjects.some((obj) => obj.__changed);
+    const shouldSort = this.__gameInstances.some((obj) => obj.__changed);
     if (shouldSort) {
-      this.__gameObjects.sort((a, b) => a.__zIndex - b.__zIndex);
-      this.__gameObjects.forEach((o) => (o.__changed = false));
+      this.__gameInstances.sort((a, b) => a.__zIndex - b.__zIndex);
+      this.__gameInstances.forEach((o) => (o.__changed = false));
     }
   }
 
-  private __step() {
-    this.__input.mouse.worldPos = this.__input.mouse.worldPos.plus(
-      this.__canvas.__getCameraPositionDelta()
-    );
-    this.__maybeSort();
-    this.__input.__handleInput(this.__gameObjects);
+  getGameContext(): GameContext {
+    return {
+      game: this,
+      input: this.__input,
+      dtFactor: Math.round(this.__options.fps / this.currentFps),
+    };
+  }
 
-    // Draw events
-    this.__canvas.drawClear();
-    const drawInfo = {
+  private __step() {
+    // Info objects
+    const drawCtx = {
       game: this,
       canvas: this.__canvas,
       input: this.__input,
       t: this.__t,
     };
-    this.beforeDraw?.(drawInfo);
-    this.__gameObjects.forEach((object) => {
-      object.draw?.(drawInfo);
+    const gameCtx = this.getGameContext();
+
+    // Camera, zIndex
+    this.__input.mouse.worldPos = this.__input.mouse.worldPos.plus(
+      this.__canvas.__getCameraPositionDelta()
+    );
+    this.__maybeSort();
+
+    // Input
+    this.__input.__handleInput(this.__gameInstances, gameCtx);
+
+    // Draw events
+    this.__canvas.drawClear();
+
+    this.beforeDraw?.(drawCtx);
+    this.__gameInstances.forEach((object) => {
+      object.draw?.(drawCtx);
     });
-    this.afterDraw?.(drawInfo);
+    this.afterDraw?.(drawCtx);
 
     // Step events
-    const stepInfo = {
-      game: this,
-      input: this.__input,
-      dtFactor: Math.round(this.__options.fps / this.currentFps),
-    };
-    this.beforeStep?.(stepInfo);
-    this.__gameObjects.forEach((object) => {
-      object.step?.(stepInfo);
+    this.beforeStep?.(gameCtx);
+    this.__gameInstances.forEach((object) => {
+      object.step?.(gameCtx);
     });
-    this.afterStep?.(stepInfo);
+    this.afterStep?.(gameCtx);
 
     // Timestep
     this.__t++;

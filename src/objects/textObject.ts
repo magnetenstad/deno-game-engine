@@ -1,5 +1,5 @@
 import { DrawStyle } from '../draw';
-import { DrawInfo } from './gameObject';
+import { DrawContext } from './gameObject';
 import { PositionObject } from './positionObject';
 
 export class TextObject extends PositionObject {
@@ -17,7 +17,7 @@ export class TextObject extends PositionObject {
     this.drawStyle = drawStyle;
   }
 
-  draw(info: DrawInfo): void {
-    info.canvas.drawText(this.getText(), this.pos, this.drawStyle);
+  draw(ctx: DrawContext): void {
+    ctx.canvas.drawText(this.getText(), this.pos, this.drawStyle);
   }
 }

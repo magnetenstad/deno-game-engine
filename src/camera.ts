@@ -19,13 +19,13 @@ export class Camera {
     if (!this.target) {
       return worldPos;
     }
-    return worldPos.plus(this.target.pos).minus(this.size.half()).round();
+    return worldPos.plus(this.target.pos).minus(this.size.half());
   }
 
   toCanvasPosition(canvasPos: Vec2) {
     if (!this.target) {
       return canvasPos;
     }
-    return canvasPos.minus(this.target.pos).plus(this.size.half()).round();
+    return canvasPos.minus(this.target.pos).plus(this.size.half());
   }
 }

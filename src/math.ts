@@ -7,12 +7,12 @@ export class Vec2 {
     this.y = y;
   }
 
-  plus(pos: Vec2) {
-    return new Vec2(this.x + pos.x, this.y + pos.y);
+  plus(vec: Vec2) {
+    return new Vec2(this.x + vec.x, this.y + vec.y);
   }
 
-  minus(pos: Vec2) {
-    return new Vec2(this.x - pos.x, this.y - pos.y);
+  minus(vec: Vec2) {
+    return new Vec2(this.x - vec.x, this.y - vec.y);
   }
 
   multiply(n: number) {
@@ -76,4 +76,12 @@ export class Vec2 {
 
 export const clamp = (value: number, min: number, max: number) => {
   return Math.max(Math.min(value, max), min);
+};
+
+export const randomFloat = (min: number, max: number) => {
+  return min + Math.random() * (max - min);
+};
+
+export const randomInt = (min: number, max: number) => {
+  return Math.round(randomFloat(min, max));
 };
