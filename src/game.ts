@@ -23,11 +23,11 @@ export class Game {
   private __canvas: Canvas;
   private __t = 0;
   private __input: Input;
+  private __currentFps = 0;
   beforeDraw?: (info: DrawInfo) => void;
   afterDraw?: (info: DrawInfo) => void;
   beforeStep?: (info: StepInfo) => void;
   afterStep?: (info: StepInfo) => void;
-  currentFps = 0;
 
   constructor(gameDiv: Element | null) {
     if (!gameDiv) {
@@ -69,6 +69,10 @@ export class Game {
     return this.__canvas;
   }
 
+  get currentFps() {
+    return this.__currentFps;
+  }
+
   getCanvasSize() {
     return new Vec2(this.__options.width, this.__options.height);
   }
@@ -99,7 +103,7 @@ export class Game {
       const interval = 1000 / this.__options.fps;
       if (delta >= interval) {
         timePrevMod = time - (delta % interval);
-        this.currentFps = 1000 / (time - timePrev);
+        this.__currentFps = 1000 / (time - timePrev);
         timePrev = time;
         this.__step();
       }
@@ -110,13 +114,7 @@ export class Game {
 
   private __maybeSort() {
     if (!this.__options.zSort) return;
-    let shouldSort = false;
-    for (let i = 0; i < this.__gameObjects.length; i++) {
-      if (this.__gameObjects[i].__changed) {
-        shouldSort = true;
-        break;
-      }
-    }
+    const shouldSort = this.__gameObjects.some((obj) => obj.__changed);
     if (shouldSort) {
       this.__gameObjects.sort((a, b) => a.__zIndex - b.__zIndex);
       this.__gameObjects.forEach((o) => (o.__changed = false));
@@ -129,50 +127,34 @@ export class Game {
     );
     this.__maybeSort();
     this.__input.__handleInput(this.__gameObjects);
+
+    // Draw events
     this.__canvas.drawClear();
-    if (this.beforeDraw)
-      this.beforeDraw({
-        game: this,
-        canvas: this.__canvas,
-        input: this.__input,
-        t: this.__t,
-      });
+    const drawInfo = {
+      game: this,
+      canvas: this.__canvas,
+      input: this.__input,
+      t: this.__t,
+    };
+    this.beforeDraw?.(drawInfo);
     this.__gameObjects.forEach((object) => {
-      if (object.draw)
-        object.draw({
-          game: this,
-          canvas: this.__canvas,
-          input: this.__input,
-          t: this.__t,
-        });
+      object.draw?.(drawInfo);
     });
-    if (this.afterDraw)
-      this.afterDraw({
-        game: this,
-        canvas: this.__canvas,
-        input: this.__input,
-        t: this.__t,
-      });
-    if (this.beforeStep)
-      this.beforeStep({
-        game: this,
-        input: this.__input,
-        dtFactor: Math.round(this.__options.fps / this.currentFps),
-      });
+    this.afterDraw?.(drawInfo);
+
+    // Step events
+    const stepInfo = {
+      game: this,
+      input: this.__input,
+      dtFactor: Math.round(this.__options.fps / this.currentFps),
+    };
+    this.beforeStep?.(stepInfo);
     this.__gameObjects.forEach((object) => {
-      if (object.step)
-        object.step({
-          game: this,
-          input: this.__input,
-          dtFactor: Math.round(this.__options.fps / this.currentFps),
-        });
+      object.step?.(stepInfo);
     });
-    if (this.afterStep)
-      this.afterStep({
-        game: this,
-        input: this.__input,
-        dtFactor: Math.round(this.__options.fps / this.currentFps),
-      });
+    this.afterStep?.(stepInfo);
+
+    // Timestep
     this.__t++;
   }
 }
