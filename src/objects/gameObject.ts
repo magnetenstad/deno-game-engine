@@ -1,6 +1,7 @@
 import { Canvas } from '../draw';
 import { Input, KeyboardKey, MouseButtonEvent } from '../input';
 import { Game } from '../game';
+import { AudioStore } from '../audio';
 
 export type DrawContext = {
   game: Game;
@@ -11,6 +12,7 @@ export type DrawContext = {
 export type GameContext = {
   game: Game;
   input: Input;
+  audio: AudioStore;
   dtFactor: number;
 };
 

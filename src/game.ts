@@ -3,6 +3,7 @@ import { initializeGameInput, Input } from './input';
 import { DrawContext, GameObject, GameContext } from './objects/gameObject';
 import { Canvas } from './draw';
 import { Vec2 } from './math';
+import { AudioStore } from './audio';
 
 const defaultOptions = {
   width: 480 as number,
@@ -24,6 +25,7 @@ export class Game {
   private __t = 0;
   private __input: Input;
   private __currentFps = 0;
+  private __audioStore = new AudioStore();
   beforeDraw?: (ctx: DrawContext) => void;
   afterDraw?: (ctx: DrawContext) => void;
   beforeStep?: (ctx: GameContext) => void;
@@ -133,6 +135,7 @@ export class Game {
     return {
       game: this,
       input: this.__input,
+      audio: this.__audioStore,
       dtFactor: Math.round(this.__options.fps / this.currentFps),
     };
   }

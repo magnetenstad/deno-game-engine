@@ -36,4 +36,12 @@ game.beforeDraw = (ctx: DrawContext) => {
   });
 };
 
+export const audio = {
+  explosion: './explosion.wav',
+} as const;
+
+Object.values(audio).forEach((url) =>
+  game.getGameContext().audio.prefetch(url)
+);
+
 game.play();
