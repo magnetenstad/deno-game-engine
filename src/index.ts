@@ -9,6 +9,7 @@ import { ImageObject } from './objects/imageObject';
 import { TextObject } from './objects/textObject';
 import { ExamplePlayer } from './objects/examples/examplePlayer';
 import { MouseButtonEvent } from './input';
+import { ImageAsset } from './assets';
 
 export {
   Game,
@@ -20,6 +21,7 @@ export {
   Camera,
   TextObject,
   ExamplePlayer,
+  ImageAsset,
   clamp,
   randomFloat,
   randomInt,
