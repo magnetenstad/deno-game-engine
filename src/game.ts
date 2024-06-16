@@ -137,6 +137,7 @@ export class Game {
       input: this.__input,
       audio: this.__audioStore,
       dtFactor: Math.round(this.__options.fps / this.currentFps),
+      t: this.__t,
     };
   }
 

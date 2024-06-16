@@ -1,7 +1,7 @@
-import { Canvas } from '../draw';
-import { Input, KeyboardKey, MouseButtonEvent } from '../input';
-import { Game } from '../game';
 import { AudioStore } from '../audio';
+import { Canvas } from '../draw';
+import { Game } from '../game';
+import { Input, KeyboardKey, MouseButtonEvent } from '../input';
 
 export type DrawContext = {
   game: Game;
@@ -14,6 +14,7 @@ export type GameContext = {
   input: Input;
   audio: AudioStore;
   dtFactor: number;
+  t: number;
 };
 
 export abstract class GameObject {
