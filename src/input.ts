@@ -1,6 +1,6 @@
 import { Canvas } from './draw';
-import { GameObject, GameContext } from './objects/gameObject';
 import { Vec2 } from './math';
+import { GameContext, GameObject } from './objects/gameObject';
 
 export enum MouseButton {
   Left,
@@ -67,8 +67,8 @@ export const initializeGameInput = (canvas: Canvas) => {
 
   const input = {
     mouse: {
-      canvasPos: new Vec2(0, 0),
-      worldPos: new Vec2(0, 0),
+      canvasPos: new Vec2(1_000_000, 1_000_000),
+      worldPos: new Vec2(1_000_000, 1_000_000),
       button: (button: MouseButton) => {
         return mouseButtonsActive.has(button);
       },
@@ -81,9 +81,10 @@ export const initializeGameInput = (canvas: Canvas) => {
 
   const eventPosition = (ev: MouseEvent) => {
     const scale = canvas.scale ?? 1;
+    const box = canvas.element.getBoundingClientRect()
     return new Vec2(
-      (ev.pageX - canvas.element.offsetLeft) / scale,
-      (ev.pageY - canvas.element.offsetTop) / scale
+      (ev.clientX - box.left) / scale,
+      (ev.clientY - box.top) / scale
     );
   };
 
