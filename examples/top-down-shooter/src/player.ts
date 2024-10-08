@@ -1,15 +1,15 @@
 import {
   DrawContext,
+  GameContext,
   ImageObject,
   MouseButton,
-  GameContext,
-} from '../../../lib';
-import { MouseButtonEvent } from '../../../lib/input';
-import { Bullet } from './bullet';
+} from '../../../lib'
+import { MouseButtonEvent } from '../../../lib/input'
+import { Bullet } from './bullet'
 
 export class Player extends ImageObject {
   constructor(x: number, y: number) {
-    super(x, y, './player.png');
+    super(x, y, './player.png')
   }
 
   draw(ctx: DrawContext): void {
@@ -17,19 +17,19 @@ export class Player extends ImageObject {
       startOffset: 20,
       maxLength: 20,
       minLength: 20,
-    });
-    ctx.canvas.drawImage(this.image, this.pos);
+    })
+    ctx.canvas.drawImage(this.image, this.pos)
   }
 
   step(ctx: GameContext): void {
-    const target = this.pos.copy();
-    if (ctx.input.key('w')) target.y -= 1;
-    if (ctx.input.key('a')) target.x -= 1;
-    if (ctx.input.key('s')) target.y += 1;
-    if (ctx.input.key('d')) target.x += 1;
-    this.pos = this.pos.moveTowards(target, 1.5 * ctx.dtFactor);
+    const target = this.pos.copy()
+    if (ctx.input.key('w')) target.y -= 1
+    if (ctx.input.key('a')) target.x -= 1
+    if (ctx.input.key('s')) target.y += 1
+    if (ctx.input.key('d')) target.x += 1
+    this.pos = this.pos.moveTowards(target, 1.5 * ctx.dtFactor)
 
-    this.setZIndex(this.pos.y + this.image.size().y);
+    this.setZIndex(this.pos.y + this.image.size().y)
   }
 
   onMousePress(ev: MouseButtonEvent, ctx: GameContext): void {
@@ -37,7 +37,7 @@ export class Player extends ImageObject {
       new Bullet(
         this.imageCenter().moveTowards(ev.worldPos, 16),
         ev.worldPos
-      ).activate(ctx.game);
+      ).activate(ctx.game)
     }
   }
 }
