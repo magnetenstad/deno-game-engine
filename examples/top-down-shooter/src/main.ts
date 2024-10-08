@@ -6,7 +6,7 @@ const gameDiv = document.querySelector('#game')
 
 const options = {
   width: 480,
-  height: 320,
+  height: 270,
   scale: 3,
   fps: 60,
 }
